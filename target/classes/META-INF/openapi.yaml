@@ -25,6 +25,12 @@ security:
     -
         basicAuth: []
 
+tags:
+   - name: customers
+     description: "Customers"
+   - name: stores
+     description: "Stores"
+
 components:
     securitySchemes:
         basicAuth:
@@ -88,7 +94,7 @@ components:
                 firstName: {type: string, description: "First Name of the customer", example: John},
                 lastName: {type: string, description: "Last Name of the customer", example: Doe},
                 email: {type: string, description: "Email of the customer", example: John.Doe@gmail.com},
-                phoneNumber: {type: string, description: "Phone # of the customer", example: '+1.613.555.1212'},
+                phoneNumber: {type: string, description: "Phone of the customer", example: '+1.613.555.1212'},
                 billingAddress: {$ref: '#/components/schemas/Address'},
                 shippingAddress: {$ref: '#/components/schemas/Address'}
             }
@@ -109,6 +115,7 @@ components:
                 $ref: "#/components/schemas/PojoBase"
             }]
             properties: {
+                type: {type: string, description: "Address type. Billing - B, Shipping - S", example: "B"},
                 street: {type: string, description: "Location of Address (street)", example: "1385 Woodroffe Avenue"},
                 city: {type: string, description: "Location of Address (city)", example: "Ottawa"},
                 state: {type: string, description: "Location of Address (State/Province)", example: "ON"},
@@ -126,6 +133,26 @@ components:
             allOf: [{
                 $ref: "#/components/schemas/Address"  # ShippingAddress has all properties of Address
             }]
+        Store:
+           description: "(20F) Group Project - Store entity" 
+           type: object
+           allOf: [{
+                $ref: "#/components/schemas/PojoBase"
+            }]
+           properties: {
+                storeName: {type: string, description: "Store name", example: Ottawa store}
+           }
+        Product:
+            description: "(20F) Group Project - Product entity"
+            type: object
+            allOf: [{
+                $ref: "#/components/schemas/PojoBase"
+            }]
+            properties: {
+                description: {type: string, description: "Product description", example: Tea},
+                serialNo: {type: string, description: "Product Serial Number", example: SN-123},
+                stores: {type: array, description: "Store list"}
+            }
 
 paths:
     /customer:
@@ -145,6 +172,8 @@ paths:
                     $ref: "#/components/responses/UnauthorizedAdminError"
                 }
             }
+            tags:
+               - customers
 
         post:
             requestBody: {
@@ -170,6 +199,8 @@ paths:
                     }
                 }
             }
+            tags:
+               - customers
 
     /customer/{id}:
         get:
@@ -198,6 +229,9 @@ paths:
                     $ref: "#/components/responses/NotFound"
                 }
             }
+            tags:
+               - customers
+            
         delete:
             summary: "Removes a customer by its id"
             parameters: [{
@@ -217,3 +251,101 @@ paths:
                     $ref: "#/components/responses/NotFound"
                 }
             }
+            tags:
+               - customers
+    /store:
+        get:
+            responses: {
+                "200": {
+                    description: "Ok (Successful operation)",
+                    content: {
+                        application/json: {
+                            schema: {
+                                $ref: "#/components/schemas/storeList"
+                            }
+                        }
+                    }
+                },
+                "401": {
+                    $ref: "#/components/responses/UnauthorizedAdminError"
+                }
+            }
+            tags:
+               - stores
+        post:
+            requestBody: {
+                description: "new store to be added to Db",
+                required: true,
+                content: {
+                    application/json: {
+                        schema: {
+                            $ref: "#/components/schemas/Store"
+                        }
+                    }
+                }
+            }
+            responses: {
+                "200": {
+                    description: "Ok (Successful operation)",
+                    content: {
+                        application/json: {
+                            schema: {
+                                $ref: "#/components/schemas/StoreList"
+                            }
+                        }
+                    }
+                }
+            }
+            tags:
+               - stores
+
+    /store/{id}:
+        get:
+            summary: "Retrieves a store by its id"
+            parameters: [{
+                $ref: "#/components/parameters/idPathParam"
+            }]
+            responses: {
+                "200": {
+                    description: "Ok (Successful operation)",
+                    content: {
+                        application/json: {
+                            schema: {
+                                $ref: "#/components/schemas/Store"
+                            }
+                        }
+                    }
+                },
+                "401": {
+                    $ref: "#/components/responses/UnauthorizedUserError"
+                },
+                "403": {
+                    $ref: "#/components/responses/ForbiddenError"
+                },
+                "404": {
+                    $ref: "#/components/responses/NotFound"
+                }
+            }
+            tags:
+               - stores
+        delete:
+            summary: "Removes a store by its id"
+            parameters: [{
+                $ref: "#/components/parameters/idPathParam"
+            }]
+            responses: {
+                "204": {
+                    description: "Ok (No content, successful operation)"
+                },
+                "401": {
+                    $ref: "#/components/responses/UnauthorizedUserError"
+                },
+                "403": {
+                    $ref: "#/components/responses/ForbiddenError"
+                },
+                "404": {
+                    $ref: "#/components/responses/NotFound"
+                }
+            }
+            tags:
+               - stores            

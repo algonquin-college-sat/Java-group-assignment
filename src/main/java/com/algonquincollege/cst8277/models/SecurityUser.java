@@ -4,7 +4,7 @@
  *
  * @author (original) Mike Norman
  * 
- * update by : I. Am. A. Student 040nnnnnnn
+ * update by : Oladotun Akinlabi 04.....
  */
 package com.algonquincollege.cst8277.models;
 
@@ -13,10 +13,16 @@ import java.security.Principal;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import com.algonquincollege.cst8277.rest.SecurityRoleSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -27,8 +33,10 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 /**
  * User class used for (JSR-375) Java EE Security authorization/authentication
  */
-
-@Entity(name="SecurityUser")
+@MappedSuperclass
+@Entity(name = "SecurityUser")
+@Table(name = "SECURITY_USER")
+@AttributeOverride(name="id", column=@Column(name="USER_ID"))
 public class SecurityUser implements Serializable, Principal {
     /** explicit set serialVersionUID */
     private static final long serialVersionUID = 1L;
@@ -44,6 +52,8 @@ public class SecurityUser implements Serializable, Principal {
     protected String username;
     protected String pwHash;
     protected Set<SecurityRole> roles = new HashSet<>();
+    
+    @OneToOne(cascade=CascadeType.ALL)
     protected CustomerPojo cust;
 
     public SecurityUser() {

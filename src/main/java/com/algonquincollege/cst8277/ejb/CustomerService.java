@@ -4,7 +4,7 @@
  *
  * @author (original) Mike Norman
  * 
- * update by : I. Am. A. Student 040nnnnnnn
+ * update by : Hanna Bernyk 040904190
  *
  */
 package com.algonquincollege.cst8277.ejb;
@@ -33,13 +33,12 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-//import javax.transaction.Transactional;
+import javax.transaction.Transactional;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.security.enterprise.identitystore.Pbkdf2PasswordHash;
-import javax.transaction.Transactional;
-
+import javax.servlet.ServletContext;
 import com.algonquincollege.cst8277.models.AddressPojo;
 import com.algonquincollege.cst8277.models.CustomerPojo;
 import com.algonquincollege.cst8277.models.ProductPojo;
@@ -54,30 +53,63 @@ import com.algonquincollege.cst8277.models.StorePojo;
 @Singleton
 public class CustomerService implements Serializable {
     private static final long serialVersionUID = 1L;
-    
     public static final String CUSTOMER_PU = "acmeCustomers-PU";
-
     @PersistenceContext(name = CUSTOMER_PU)
     protected EntityManager em;
-
+    @Inject
+    protected ServletContext servletContext;
     @Inject
     protected Pbkdf2PasswordHash pbAndjPasswordHash;
-    
-    //TODO
+    // TODO
 
     public List<CustomerPojo> getAllCustomers() {
-        return null;
+        try {
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<CustomerPojo> q = cb.createQuery(CustomerPojo.class);
+            Root<CustomerPojo> c = q.from(CustomerPojo.class);
+            q.select(c);
+            TypedQuery<CustomerPojo> q2 = em.createQuery(q);
+            List<CustomerPojo> allCustomers = q2.getResultList();
+            return allCustomers;
+        }
+        catch (Exception e) {
+            servletContext.log("Error during calling getAllCustomers function.", e);
+            return null;
+        }
     }
 
     public CustomerPojo getCustomerById(int custPK) {
-        return null;
+        try {
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<CustomerPojo> q = cb.createQuery(CustomerPojo.class);
+            Root<CustomerPojo> c = q.from(CustomerPojo.class);
+            q.where(cb.equal(c.get("id"), custPK));
+            TypedQuery<CustomerPojo> q2 = em.createQuery(q);
+            return q2.getSingleResult();
+        }
+        catch (Exception e) {
+            servletContext.log("Error during calling getCustomerById function.", e);
+            return null;
+        }
     }
+
+    @Transactional
+    public Boolean deleteCustomerById(int custPK) {
+        CustomerPojo customerToDelete = em.find(CustomerPojo.class, custPK);
+        if(customerToDelete != null) {
+            em.remove(customerToDelete);
+            return true;
+        }
+        return false;
+    }
+
     
     @Transactional
     public CustomerPojo persistCustomer(CustomerPojo newCustomer) {
-        return null;
+        em.persist(newCustomer);
+        return newCustomer;
     }
-    
+
     @Transactional
     public void buildUserForNewCustomer(CustomerPojo newCustomerWithIdTimestamps) {
         SecurityUser userForNewCustomer = new SecurityUser();
@@ -91,10 +123,11 @@ public class CustomerService implements Serializable {
         String pwHash = pbAndjPasswordHash.generate(DEFAULT_USER_PASSWORD.toCharArray());
         userForNewCustomer.setPwHash(pwHash);
         userForNewCustomer.setCustomer(newCustomerWithIdTimestamps);
-        SecurityRole userRole = em.createNamedQuery(ROLE_BY_NAME_QUERY,
-            SecurityRole.class).setParameter(PARAM1, USER_ROLE).getSingleResult();
+        /**SecurityRole userRole = em.createNamedQuery(ROLE_BY_NAME_QUERY,
+        SecurityRole.class).setParameter(PARAM1, USER_ROLE).getSingleResult();
         userForNewCustomer.getRoles().add(userRole);
         userRole.getUsers().add(userForNewCustomer);
+        **/
         em.persist(userForNewCustomer);
     }
 
@@ -112,7 +145,7 @@ public class CustomerService implements Serializable {
     }
 
     public List<ProductPojo> getAllProducts() {
-        //example of using JPA Criteria query instead of JPQL
+        // example of using JPA Criteria query instead of JPQL
         try {
             CriteriaBuilder cb = em.getCriteriaBuilder();
             CriteriaQuery<ProductPojo> q = cb.createQuery(ProductPojo.class);
@@ -138,11 +171,9 @@ public class CustomerService implements Serializable {
     public StorePojo getStoreById(int id) {
         return null;
     }
-    
     /*
-    
-    public OrderPojo getAllOrders ... getOrderbyId ... build Orders with OrderLines ...
-     
-    */
-
+     * 
+     * public OrderPojo getAllOrders ... getOrderbyId ... build Orders with OrderLines ...
+     * 
+     */
 }

@@ -4,18 +4,27 @@
  *
  * @author (original) Mike Norman
  * 
- * update by : I. Am. A. Student 040nnnnnnn
+ * update by : Hanna Bernyk 040904190
  */
 package com.algonquincollege.cst8277.models;
 
 import java.io.Serializable;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
 *
 * Description: model for the Customer object
 */
+@Entity(name="Customer")
+@Table(name="CUSTOMER")
+@AttributeOverride(name="id", column=@Column(name="CUSTOMER_ID"))
 public class CustomerPojo extends PojoBase implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -76,6 +85,8 @@ public class CustomerPojo extends PojoBase implements Serializable {
 
     //dont use CascadeType.All (skipping CascadeType.REMOVE): what if two customers
     //live at the same address and 1 leaves the house but the other does not?
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "SHIPPINGADDRESS_ADDR_ID")
     public AddressPojo getShippingAddress() {
         return shippingAddress;
     }
@@ -83,6 +94,8 @@ public class CustomerPojo extends PojoBase implements Serializable {
         this.shippingAddress = shippingAddress;
     }
 
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "BILLINGADDRESS_ADDR_ID")
     public AddressPojo getBillingAddress() {
         return billingAddress;
     }

@@ -7,7 +7,7 @@
         name="customersConnectionPool"> 
         <property name="User" value="sa"/> 
         <property name="Password" value="password"/>
-        <!-- <property name="URL" value="jdbc:h2:mem:20fcustomers"/> -->
+        <!--<property name="URL" value="jdbc:h2:mem:20fcustomers"/>-->
         <property name="URL" value="jdbc:h2:tcp://localhost/~/20fGroupProject"/>
     </jdbc-connection-pool>
     <jdbc-resource jndi-name="java:app/jdbc/customers" pool-name="customersConnectionPool">

@@ -28,6 +28,7 @@ import javax.security.enterprise.SecurityContext;
 import javax.servlet.ServletContext;
 import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -50,6 +51,7 @@ import com.algonquincollege.cst8277.models.SecurityUser;
 @Produces(MediaType.APPLICATION_JSON)
 public class CustomerResource {
 
+    @EJB
     protected CustomerService customerServiceBean;
 
     @Inject
@@ -58,6 +60,7 @@ public class CustomerResource {
     @Inject
     protected SecurityContext sc;
 
+    @GET
     public Response getCustomers() {
         servletContext.log("retrieving all customers ...");
         List<CustomerPojo> custs = customerServiceBean.getAllCustomers();
@@ -65,6 +68,8 @@ public class CustomerResource {
         return response;
     }
 
+    @GET
+    @Path("{id}")
     public Response getCustomerById(@PathParam(RESOURCE_PATH_ID_ELEMENT) int id) {
         servletContext.log("try to retrieve specific customer " + id);
         Response response = null;
@@ -91,16 +96,37 @@ public class CustomerResource {
         return response;
     }
 
-    @Transactional
+    @DELETE
+    @Path("{id}")
+    public Response deleteCustomerById(@PathParam(RESOURCE_PATH_ID_ELEMENT) int id) {
+        servletContext.log("try to delete specific customer " + id);
+        Response response = null;
+        Boolean result = true;
+
+        result = customerServiceBean.deleteCustomerById(id);
+        response = Response.status( result == false ? NOT_FOUND : OK).entity(result).build();
+        /*
+         * if (sc.isCallerInRole(ADMIN_ROLE)) {
+         * result = customerServiceBean.deleteCustomerById(id);
+         * response = Response.status( result == false ? NOT_FOUND : OK).entity(result).build();
+         * }else {
+         * response = Response.status(BAD_REQUEST).build();
+         * }
+         */        return response;
+    }
+
+    
+    @POST
     public Response addCustomer(CustomerPojo newCustomer) {
       Response response = null;
-      CustomerPojo newCustomerWithIdTimestamps = customerServiceBean.persistCustomer(newCustomer);
-      //build a SecurityUser linked to the new customer
-      customerServiceBean.buildUserForNewCustomer(newCustomerWithIdTimestamps);
-      response = Response.ok(newCustomerWithIdTimestamps).build();
+      CustomerPojo saveCustomerPojo = customerServiceBean.persistCustomer(newCustomer);
+      //Create security user
+      customerServiceBean.buildUserForNewCustomer(saveCustomerPojo);
+      response = Response.ok(saveCustomerPojo).build();
       return response;
     }
 
+    @Consumes("application/xml")
     public Response addAddressForCustomer(@PathParam(RESOURCE_PATH_ID_ELEMENT) int id, AddressPojo newAddress) {
       Response response = null;
       CustomerPojo updatedCustomer = customerServiceBean.setAddressFor(id, newAddress);

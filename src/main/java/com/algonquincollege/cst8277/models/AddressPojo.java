@@ -4,13 +4,20 @@
  *
  * @author (original) Mike Norman
  * 
- * update by : I. Am. A. Student 040nnnnnnn
+ * update by : Hanna Bernyk 040904190
  */
+
 package com.algonquincollege.cst8277.models;
 
 import java.io.Serializable;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.Embeddable;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
@@ -30,6 +37,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     @Type(value = ShippingAddressPojo.class, name = "S")
 })
 @Entity(name="Address")
+@Table(name="ADDRESS")
+@AttributeOverride(name="id", column=@Column(name="ADDR_ID"))
+@DiscriminatorColumn(name="ADDR_TYPE")
 public abstract class AddressPojo extends PojoBase implements Serializable {
 
     /** explicit set serialVersionUID */
@@ -82,5 +92,4 @@ public abstract class AddressPojo extends PojoBase implements Serializable {
     public void setStreet(String street) {
         this.street = street;
     }
-
 }

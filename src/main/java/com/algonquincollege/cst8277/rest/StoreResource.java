@@ -4,11 +4,12 @@
  *
  * @author (original) Mike Norman
  * 
- * update by : I. Am. A. Student 040nnnnnnn
+ * update by : Hanna Bernyk 040904190
  *
  */
 package com.algonquincollege.cst8277.rest;
 
+import static com.algonquincollege.cst8277.utils.MyConstants.CUSTOMER_RESOURCE_NAME;
 import static com.algonquincollege.cst8277.utils.MyConstants.RESOURCE_PATH_ID_ELEMENT;
 import static com.algonquincollege.cst8277.utils.MyConstants.RESOURCE_PATH_ID_PATH;
 import static com.algonquincollege.cst8277.utils.MyConstants.STORE_RESOURCE_NAME;
@@ -29,13 +30,18 @@ import javax.ws.rs.core.Response;
 import com.algonquincollege.cst8277.ejb.CustomerService;
 import com.algonquincollege.cst8277.models.StorePojo;
 
+@Path(STORE_RESOURCE_NAME)
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class StoreResource {
 
+    @EJB
     protected CustomerService customerServiceBean;
 
     @Inject
     protected ServletContext servletContext;
 
+    @GET
     public Response getStores() {
         servletContext.log("retrieving all stores ...");
         List<StorePojo> stores = customerServiceBean.getAllStores();
@@ -43,6 +49,8 @@ public class StoreResource {
         return response;
     }
 
+    @GET
+    @Path("{id}")
     public Response getStoreById(@PathParam(RESOURCE_PATH_ID_ELEMENT) int id) {
         servletContext.log("try to retrieve specific store " + id);
         StorePojo theStore = customerServiceBean.getStoreById(id);

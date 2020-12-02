@@ -10,9 +10,12 @@ package com.algonquincollege.cst8277.models;
 
 import java.io.Serializable;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 @Entity
+@DiscriminatorValue("S")
 public class ShippingAddressPojo extends AddressPojo implements Serializable  {
     /** explicit set serialVersionUID */
     private static final long serialVersionUID = 1L;

@@ -4,13 +4,16 @@
  *
  * @author (original) Mike Norman
  * 
- * update by : I. Am. A. Student 040nnnnnnn
+ * update by : Hanna Bernyk 040904190
  */
 package com.algonquincollege.cst8277.models;
 
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -19,6 +22,9 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 *
 * Description: model for the Product object
 */
+
+@Entity(name="Product")
+@Table(name="PRODUCT")
 public class ProductPojo extends PojoBase implements Serializable {
     private static final long serialVersionUID = 1L;
 
