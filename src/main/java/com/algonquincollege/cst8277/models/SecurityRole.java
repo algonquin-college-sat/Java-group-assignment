@@ -4,7 +4,7 @@
  *
  * @author (original) Mike Norman
  * 
- * update by : I. Am. A. Student 040nnnnnnn
+ * update by : Hanna Bernyk 040904190
  */
 package com.algonquincollege.cst8277.models;
 
@@ -26,6 +26,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
  */
 
 @Entity(name="SecurityRole")
+@Table(name="SECURITY_ROLE")
 public class SecurityRole implements Serializable {
     /** explicit set serialVersionUID */
     private static final long serialVersionUID = 1L;

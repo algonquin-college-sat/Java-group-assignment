@@ -41,6 +41,8 @@ import javax.security.enterprise.identitystore.Pbkdf2PasswordHash;
 import javax.servlet.ServletContext;
 import com.algonquincollege.cst8277.models.AddressPojo;
 import com.algonquincollege.cst8277.models.CustomerPojo;
+import com.algonquincollege.cst8277.models.OrderLinePojo;
+import com.algonquincollege.cst8277.models.OrderPojo;
 import com.algonquincollege.cst8277.models.ProductPojo;
 import com.algonquincollege.cst8277.models.SecurityRole;
 import com.algonquincollege.cst8277.models.SecurityUser;
@@ -106,7 +108,7 @@ public class CustomerService implements Serializable {
     
     @Transactional
     public CustomerPojo persistCustomer(CustomerPojo newCustomer) {
-        em.persist(newCustomer);
+        buildUserForNewCustomer(newCustomer);
         return newCustomer;
     }
 
@@ -160,20 +162,151 @@ public class CustomerService implements Serializable {
         }
     }
 
-    public ProductPojo getProductById(int prodId) {
-        return null;
+    public ProductPojo getProductById(int prodPK) {
+        try {
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<ProductPojo> q = cb.createQuery(ProductPojo.class);
+            Root<ProductPojo> c = q.from(ProductPojo.class);
+            q.where(cb.equal(c.get("id"), prodPK));
+            TypedQuery<ProductPojo> q2 = em.createQuery(q);
+            return q2.getSingleResult();
+        }
+        catch (Exception e) {
+            servletContext.log("Error during calling getProductById function.", e);
+            return null;
+        }
     }
 
+    @Transactional
+    public ProductPojo persistProduct(ProductPojo newProduct) {
+        em.persist(newProduct);
+        return newProduct;
+    }
+
+    @Transactional
+    public Boolean deleteProductById(int prodId) {
+        Boolean result = false;
+        ProductPojo productToDelete = em.find(ProductPojo.class, prodId);
+        if(productToDelete != null) {
+            em.remove(productToDelete);
+            result = true;
+        }
+        return result;
+    }
+    
     public List<StorePojo> getAllStores() {
-        return null;
+        try {
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<StorePojo> q = cb.createQuery(StorePojo.class);
+            Root<StorePojo> c = q.from(StorePojo.class);
+            q.select(c);
+            TypedQuery<StorePojo> q2 = em.createQuery(q);
+            List<StorePojo> allStores = q2.getResultList();
+            return allStores;
+        }
+        catch (Exception e) {
+            return null;
+        }
     }
 
-    public StorePojo getStoreById(int id) {
-        return null;
+    public StorePojo getStoreById(int storePK) {
+        try {
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<StorePojo> q = cb.createQuery(StorePojo.class);
+            Root<StorePojo> c = q.from(StorePojo.class);
+            q.where(cb.equal(c.get("id"), storePK));
+            TypedQuery<StorePojo> q2 = em.createQuery(q);
+            return q2.getSingleResult();
+        }
+        catch (Exception e) {
+            servletContext.log("Error during calling getProductById function.", e);
+            return null;
+        }
+    }
+
+    @Transactional
+    public StorePojo persistStore(StorePojo newStore) {
+        em.persist(newStore);
+        return newStore;
+    }
+    
+    @Transactional
+    public Boolean deleteStoreById(int storeId) {
+        Boolean result = false;
+        StorePojo storeToDelete = em.find(StorePojo.class, storeId);
+        if(storeToDelete != null) {
+            em.remove(storeToDelete);
+            result = true;
+        }
+        return result;
     }
     /*
      * 
      * public OrderPojo getAllOrders ... getOrderbyId ... build Orders with OrderLines ...
      * 
      */
+
+    public OrderPojo getOrderById(int orderPK) {
+        try {
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<OrderPojo> q = cb.createQuery(OrderPojo.class);
+            Root<OrderPojo> c = q.from(OrderPojo.class);
+            q.where(cb.equal(c.get("id"), orderPK));
+            TypedQuery<OrderPojo> q2 = em.createQuery(q);
+            return q2.getSingleResult();
+        }
+        catch (Exception e) {
+            servletContext.log("Error during calling getOrderById function.", e);
+            return null;
+        }
+    }
+
+    public List<OrderPojo> getAllOrders() {
+        try {
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<OrderPojo> q = cb.createQuery(OrderPojo.class);
+            Root<OrderPojo> c = q.from(OrderPojo.class);
+            q.select(c);
+            TypedQuery<OrderPojo> q2 = em.createQuery(q);
+            List<OrderPojo> allOrders = q2.getResultList();
+            return allOrders;
+        }
+        catch (Exception e) {
+            return null;
+        }
+    }
+    
+    @Transactional
+    public OrderPojo persistOrder(OrderPojo newOrder) {
+        em.persist(newOrder);
+        return newOrder;
+    }
+    
+    @Transactional
+    public Boolean deleteOrderById(int orderId) {
+        Boolean result = false;
+        OrderPojo orderToDelete = em.find(OrderPojo.class, orderId);
+        if(orderToDelete != null) {
+            em.remove(orderToDelete);
+            result = true;
+        }
+        return result;
+    }
+
+    @Transactional
+    public OrderLinePojo persistOrderLine(OrderLinePojo newOrderLine) {
+        em.persist(newOrderLine);
+        return newOrderLine;
+    }
+
+    @Transactional
+    public Boolean deleteOrderLineById(int ordLinePK) {
+        OrderLinePojo orderLineToDelete = em.find(OrderLinePojo.class, ordLinePK);
+        if(orderLineToDelete != null) {
+            em.remove(orderLineToDelete);
+            return true;
+        }
+        return false;
+    }
+
 }

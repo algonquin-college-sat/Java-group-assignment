@@ -4,11 +4,12 @@
  *
  * @author (original) Mike Norman
  * 
- * update by : I. Am. A. Student 040nnnnnnn
+ * update by : Hanna Bernyk 040904190
  *
  */
 package com.algonquincollege.cst8277.rest;
 
+import static com.algonquincollege.cst8277.utils.MyConstants.CUSTOMER_RESOURCE_NAME;
 import static com.algonquincollege.cst8277.utils.MyConstants.PRODUCT_RESOURCE_NAME;
 import static com.algonquincollege.cst8277.utils.MyConstants.RESOURCE_PATH_ID_ELEMENT;
 import static com.algonquincollege.cst8277.utils.MyConstants.RESOURCE_PATH_ID_PATH;
@@ -29,8 +30,12 @@ import javax.ws.rs.core.Response;
 import com.algonquincollege.cst8277.ejb.CustomerService;
 import com.algonquincollege.cst8277.models.ProductPojo;
 
+@Path(PRODUCT_RESOURCE_NAME)
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class ProductResource {
 
+    @EJB
     protected CustomerService customerServiceBean;
 
     @Inject

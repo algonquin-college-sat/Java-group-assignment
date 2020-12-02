@@ -4,7 +4,7 @@
  *
  * @author (original) Mike Norman
  * 
- * update by : I. Am. A. Student 040nnnnnnn
+ * update by : Hanna Bernyk 040904190
  *
  */
 package com.algonquincollege.cst8277.rest;
@@ -120,9 +120,7 @@ public class CustomerResource {
     public Response addCustomer(CustomerPojo newCustomer) {
       Response response = null;
       CustomerPojo saveCustomerPojo = customerServiceBean.persistCustomer(newCustomer);
-      //Create security user
-      customerServiceBean.buildUserForNewCustomer(saveCustomerPojo);
-      response = Response.ok(saveCustomerPojo).build();
+      response = Response.ok(newCustomer).build();
       return response;
     }
 

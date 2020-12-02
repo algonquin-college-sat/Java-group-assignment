@@ -30,6 +30,10 @@ tags:
      description: "Customers"
    - name: stores
      description: "Stores"
+   - name: products
+     description: "Products"
+   - name: orders
+     description: "Orders"
 
 components:
     securitySchemes:
@@ -153,6 +157,18 @@ components:
                 serialNo: {type: string, description: "Product Serial Number", example: SN-123},
                 stores: {type: array, description: "Store list"}
             }
+        Order:
+            description: "(20F) Group Project - Order entity"
+            type: object
+            allOf: [{
+                $ref: "#/components/schemas/PojoBase"
+            }]
+            properties: {
+                description: {type: string, description: "Order description", example: My order},
+                orderlines: {type: array, description: "Order lines"},
+                owningCustomer: {type: string, description: "Owning customer"}
+            }
+            
 
 paths:
     /customer:
@@ -348,4 +364,202 @@ paths:
                 }
             }
             tags:
-               - stores            
+               - stores
+    /product:
+        get:
+            responses: {
+                "200": {
+                    description: "Ok (Successful operation)",
+                    content: {
+                        application/json: {
+                            schema: {
+                                $ref: "#/components/schemas/ProductsList"
+                            }
+                        }
+                    }
+                },
+                "401": {
+                    $ref: "#/components/responses/UnauthorizedAdminError"
+                }
+            }
+            tags:
+               - products
+
+        post:
+            requestBody: {
+                description: "new product to be added to Db",
+                required: true,
+                content: {
+                    application/json: {
+                        schema: {
+                            $ref: "#/components/schemas/Product"
+                        }
+                    }
+                }
+            }
+            responses: {
+                "200": {
+                    description: "Ok (Successful operation)",
+                    content: {
+                        application/json: {
+                            schema: {
+                                $ref: "#/components/schemas/ProductsList"
+                            }
+                        }
+                    }
+                }
+            }
+            tags:
+               - products
+
+    /product/{id}:
+        get:
+            summary: "Retrieves a product by its id"
+            parameters: [{
+                $ref: "#/components/parameters/idPathParam"
+            }]
+            responses: {
+                "200": {
+                    description: "Ok (Successful operation)",
+                    content: {
+                        application/json: {
+                            schema: {
+                                $ref: "#/components/schemas/Product"
+                            }
+                        }
+                    }
+                },
+                "401": {
+                    $ref: "#/components/responses/UnauthorizedUserError"
+                },
+                "403": {
+                    $ref: "#/components/responses/ForbiddenError"
+                },
+                "404": {
+                    $ref: "#/components/responses/NotFound"
+                }
+            }
+            tags:
+               - products
+            
+        delete:
+            summary: "Removes a product by its id"
+            parameters: [{
+                $ref: "#/components/parameters/idPathParam"
+            }]
+            responses: {
+                "204": {
+                    description: "Ok (No content, successful operation)"
+                },
+                "401": {
+                    $ref: "#/components/responses/UnauthorizedUserError"
+                },
+                "403": {
+                    $ref: "#/components/responses/ForbiddenError"
+                },
+                "404": {
+                    $ref: "#/components/responses/NotFound"
+                }
+            }
+            tags:
+               - products
+               
+    /order:
+        get:
+            responses: {
+                "200": {
+                    description: "Ok (Successful operation)",
+                    content: {
+                        application/json: {
+                            schema: {
+                                $ref: "#/components/schemas/OrdersList"
+                            }
+                        }
+                    }
+                },
+                "401": {
+                    $ref: "#/components/responses/UnauthorizedAdminError"
+                }
+            }
+            tags:
+               - orders
+
+        post:
+            requestBody: {
+                description: "new order to be added to Db",
+                required: true,
+                content: {
+                    application/json: {
+                        schema: {
+                            $ref: "#/components/schemas/Order"
+                        }
+                    }
+                }
+            }
+            responses: {
+                "200": {
+                    description: "Ok (Successful operation)",
+                    content: {
+                        application/json: {
+                            schema: {
+                                $ref: "#/components/schemas/OrdersList"
+                            }
+                        }
+                    }
+                }
+            }
+            tags:
+               - orders
+
+    /order/{id}:
+        get:
+            summary: "Retrieves a order by its id"
+            parameters: [{
+                $ref: "#/components/parameters/idPathParam"
+            }]
+            responses: {
+                "200": {
+                    description: "Ok (Successful operation)",
+                    content: {
+                        application/json: {
+                            schema: {
+                                $ref: "#/components/schemas/Order"
+                            }
+                        }
+                    }
+                },
+                "401": {
+                    $ref: "#/components/responses/UnauthorizedUserError"
+                },
+                "403": {
+                    $ref: "#/components/responses/ForbiddenError"
+                },
+                "404": {
+                    $ref: "#/components/responses/NotFound"
+                }
+            }
+            tags:
+               - orders
+            
+        delete:
+            summary: "Removes a order by its id"
+            parameters: [{
+                $ref: "#/components/parameters/idPathParam"
+            }]
+            responses: {
+                "204": {
+                    description: "Ok (No content, successful operation)"
+                },
+                "401": {
+                    $ref: "#/components/responses/UnauthorizedUserError"
+                },
+                "403": {
+                    $ref: "#/components/responses/ForbiddenError"
+                },
+                "404": {
+                    $ref: "#/components/responses/NotFound"
+                }
+            }
+            tags:
+               - orders
+               
