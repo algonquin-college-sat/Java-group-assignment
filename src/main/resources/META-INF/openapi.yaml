@@ -154,8 +154,7 @@ components:
             }]
             properties: {
                 description: {type: string, description: "Product description", example: Tea},
-                serialNo: {type: string, description: "Product Serial Number", example: SN-123},
-                stores: {type: array, description: "Store list"}
+                serialNo: {type: string, description: "Product Serial Number", example: SN-123}
             }
         Order:
             description: "(20F) Group Project - Order entity"
@@ -164,9 +163,7 @@ components:
                 $ref: "#/components/schemas/PojoBase"
             }]
             properties: {
-                description: {type: string, description: "Order description", example: My order},
-                orderlines: {type: array, description: "Order lines"},
-                owningCustomer: {type: string, description: "Owning customer"}
+                description: {type: string, description: "Order description", example: My order}
             }
             
 

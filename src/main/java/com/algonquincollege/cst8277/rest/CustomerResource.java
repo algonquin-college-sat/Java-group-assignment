@@ -124,7 +124,6 @@ public class CustomerResource {
       return response;
     }
 
-    @Consumes("application/xml")
     public Response addAddressForCustomer(@PathParam(RESOURCE_PATH_ID_ELEMENT) int id, AddressPojo newAddress) {
       Response response = null;
       CustomerPojo updatedCustomer = customerServiceBean.setAddressFor(id, newAddress);
