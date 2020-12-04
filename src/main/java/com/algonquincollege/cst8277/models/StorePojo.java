@@ -12,7 +12,13 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.algonquincollege.cst8277.rest.ProductSerializer;
@@ -24,6 +30,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 */
 @Entity(name="Store")
 @Table(name="STORE")
+@AttributeOverride(name="id", column=@Column(name="store_id"))
 public class StorePojo extends PojoBase implements Serializable {
     private static final long serialVersionUID = 1L;
     
@@ -45,6 +52,10 @@ public class StorePojo extends PojoBase implements Serializable {
       //Discovered what I think is a bug: you should be able to list them in any order,
       //but it turns out, EclipseLink's JPA implementation needs the @JoinColumn StorePojo's PK
       //first, the 'inverse' to ProductPojo's PK second
+    @ManyToMany
+    @JoinTable(name = "stores_products",
+    joinColumns = @JoinColumn(name = "store_id"),
+    inverseJoinColumns = @JoinColumn(name = "product_id"))
     public Set<ProductPojo> getProducts() {
         return products;
     }

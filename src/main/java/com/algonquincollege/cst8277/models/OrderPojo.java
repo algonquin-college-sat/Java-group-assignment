@@ -9,15 +9,21 @@
 package com.algonquincollege.cst8277.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.AttributeOverride;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.algonquincollege.cst8277.rest.ProductSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
 *
@@ -29,8 +35,9 @@ import javax.persistence.Table;
 public class OrderPojo extends PojoBase implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    @Column(name="DESCRIPTION")
     protected String description;
-    @OneToMany
+    
     protected List<OrderLinePojo> orderlines;
     protected CustomerPojo owningCustomer;
     
@@ -45,22 +52,31 @@ public class OrderPojo extends PojoBase implements Serializable {
         this.description = description;
     }
 
-	public List<OrderLinePojo> getOrderlines() {
+    @OneToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(name="ORDER_LINE", joinColumns = @JoinColumn(name = "OWNINGORDER_ORDER_ID"))
+    public List<OrderLinePojo> getOrderlines() {
+	    if(this.orderlines == null) {
+	        this.orderlines = new ArrayList<OrderLinePojo>();
+	    }
 		return this.orderlines;
 	}
+	
 	public void setOrderlines(List<OrderLinePojo> orderlines) {
 		this.orderlines = orderlines;
 	}
+	
 	public OrderLinePojo addOrderline(OrderLinePojo orderline) {
 		getOrderlines().add(orderline);
 		orderline.setOwningOrder(this);
 		return orderline;
 	}
+	
 	public OrderLinePojo removeOrderline(OrderLinePojo orderline) {
 		getOrderlines().remove(orderline);
         orderline.setOwningOrder(null);
 		return orderline;
 	}
+
 
 	public CustomerPojo getOwningCustomer() {
 		return this.owningCustomer;

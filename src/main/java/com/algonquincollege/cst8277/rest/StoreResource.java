@@ -80,13 +80,6 @@ public class StoreResource {
 
         result = customerServiceBean.deleteStoreById(id);
         response = Response.status( result == false ? NOT_FOUND : OK).entity(result).build();
-        /*
-         * if (sc.isCallerInRole(ADMIN_ROLE)) {
-         * result = customerServiceBean.deleteStoreById(id);
-         * response = Response.status( result == false ? NOT_FOUND : OK).entity(result).build();
-         * }else {
-         * response = Response.status(BAD_REQUEST).build();
-         * }
-         */        return response;
+        return response;
     }
 }

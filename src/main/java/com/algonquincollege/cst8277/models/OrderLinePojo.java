@@ -10,9 +10,16 @@ package com.algonquincollege.cst8277.models;
 
 import java.io.Serializable;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -22,12 +29,14 @@ import javax.persistence.Table;
 
 @Entity(name="OrderLine")
 @Table(name="ORDER_LINE")
+@AttributeOverride(name="id", column=@Column(name="ORDER_LINE_ID"))
 public class OrderLinePojo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @EmbeddedId
     protected OrderLinePk primaryKey;
-    
+
+    @MapsId("owningOrderId")
     @ManyToOne
     protected OrderPojo owningOrder;
     protected Double amount;

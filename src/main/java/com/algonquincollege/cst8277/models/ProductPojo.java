@@ -12,7 +12,13 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -25,6 +31,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @Entity(name="Product")
 @Table(name="PRODUCT")
+@AttributeOverride(name="id", column=@Column(name="product_id"))
 public class ProductPojo extends PojoBase implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -57,6 +64,10 @@ public class ProductPojo extends PojoBase implements Serializable {
     }
     
     @JsonInclude(Include.NON_NULL)
+    @ManyToMany
+    @JoinTable(name = "stores_products",
+    joinColumns = @JoinColumn(name = "product_id"),
+    inverseJoinColumns = @JoinColumn(name = "store_id"))
     public Set<StorePojo> getStores() {
         return stores;
     }

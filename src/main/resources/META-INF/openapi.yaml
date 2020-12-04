@@ -156,6 +156,13 @@ components:
                 description: {type: string, description: "Product description", example: Tea},
                 serialNo: {type: string, description: "Product Serial Number", example: SN-123}
             }
+        ProductStore:
+           description: "(20F) Group Project - Product Store relations"
+           type: object
+           properties: {
+               productId: {type: integer, description: "Product Id", example: 123},
+               storeId: {type: integer, description: "Store Id", example: 123},
+            }           
         Order:
             description: "(20F) Group Project - Order entity"
             type: object
@@ -165,8 +172,14 @@ components:
             properties: {
                 description: {type: string, description: "Order description", example: My order}
             }
-            
-
+        OrderLine:
+            description: "(20F) Group Project - Order Line entity"
+            type: object
+            properties: {
+                orderId: {type: integer, description: "Order Id", example: 1},
+                amount: {type: number, description: "Amount"},
+                productId: {type: integer, description: "Product Id", example: 2}
+            }
 paths:
     /customer:
         get:
@@ -460,7 +473,45 @@ paths:
             }
             tags:
                - products
-               
+    /product/addProductToStore/{productId}/{storeId}:
+       put:
+            summary: "Link product and Store"
+            parameters:
+                - name: "productId"
+                  in: "path"
+                  description: "Product Id"
+                  required: true
+                  type: "integer"
+                  format: "int64"
+                - name: "storeId"
+                  in: "path"
+                  description: "Store Id"
+                  required: true
+                  type: "integer"
+                  format: "int64"
+            responses: {
+                "200": {
+                    description: "Ok (Successful operation)",
+                    content: {
+                        application/json: {
+                            schema: {
+                                $ref: "#/components/schemas/Product"
+                            }
+                        }
+                    }
+                },
+                "401": {
+                    $ref: "#/components/responses/UnauthorizedUserError"
+                },
+                "403": {
+                    $ref: "#/components/responses/ForbiddenError"
+                },
+                "404": {
+                    $ref: "#/components/responses/NotFound"
+                }
+            }
+            tags:
+               - products
     /order:
         get:
             responses: {
@@ -510,7 +561,7 @@ paths:
 
     /order/{id}:
         get:
-            summary: "Retrieves a order by its id"
+            summary: "Retrieves an order by its id"
             parameters: [{
                 $ref: "#/components/parameters/idPathParam"
             }]
@@ -539,7 +590,7 @@ paths:
                - orders
             
         delete:
-            summary: "Removes a order by its id"
+            summary: "Removes an order by its id"
             parameters: [{
                 $ref: "#/components/parameters/idPathParam"
             }]
@@ -559,4 +610,127 @@ paths:
             }
             tags:
                - orders
-               
+    /order/orderLines/{orderId}:
+        get:
+            summary: "Get order lines by order Id"
+            parameters:
+                - name: "orderId"
+                  in: "path"
+                  description: "Order Id"
+                  required: true
+                  type: "integer"
+                  format: "int64"
+            responses: {
+                "200": {
+                    description: "Ok (Successful operation)",
+                    content: {
+                        application/json: {
+                            schema: {
+                                $ref: "#/components/schemas/OrderLinesList"
+                            }
+                        }
+                    }
+                },
+                "401": {
+                    $ref: "#/components/responses/UnauthorizedAdminError"
+                }
+            }
+            tags:
+               - orders
+    /order/orderLine/{id}:
+        get:
+            summary: "Retrieves an order by its id"
+            parameters: [{
+                $ref: "#/components/parameters/idPathParam"
+            }]
+            responses: {
+                "200": {
+                    description: "Ok (Successful operation)",
+                    content: {
+                        application/json: {
+                            schema: {
+                                $ref: "#/components/schemas/OrderLine"
+                            }
+                        }
+                    }
+                },
+                "401": {
+                    $ref: "#/components/responses/UnauthorizedUserError"
+                },
+                "403": {
+                    $ref: "#/components/responses/ForbiddenError"
+                },
+                "404": {
+                    $ref: "#/components/responses/NotFound"
+                }
+            }
+            tags:
+               - orders
+            
+        delete:
+            summary: "Removes an order line by its id"
+            parameters: [{
+                $ref: "#/components/parameters/idPathParam"
+            }]
+            responses: {
+                "204": {
+                    description: "Ok (No content, successful operation)"
+                },
+                "401": {
+                    $ref: "#/components/responses/UnauthorizedUserError"
+                },
+                "403": {
+                    $ref: "#/components/responses/ForbiddenError"
+                },
+                "404": {
+                    $ref: "#/components/responses/NotFound"
+                }
+            }
+            tags:
+               - orders
+    /order/addOrderLineToOder/{productId}/{orderId}/{amount}:
+       put:
+            summary: "Add order line to order"
+            parameters:
+                - name: "productId"
+                  in: "path"
+                  description: "Product Id"
+                  required: true
+                  type: "integer"
+                  format: "int64"
+                - name: "orderId"
+                  in: "path"
+                  description: "Order Id"
+                  required: true
+                  type: "integer"
+                  format: "int64"
+                - name: "amount"
+                  in: "path"
+                  description: "Amount"
+                  required: true
+                  type: "number"
+                  format: "float"
+            responses: {
+                "200": {
+                    description: "Ok (Successful operation)",
+                    content: {
+                        application/json: {
+                            schema: {
+                                $ref: "#/components/schemas/OrderLine"
+                            }
+                        }
+                    }
+                },
+                "401": {
+                    $ref: "#/components/responses/UnauthorizedUserError"
+                },
+                "403": {
+                    $ref: "#/components/responses/ForbiddenError"
+                },
+                "404": {
+                    $ref: "#/components/responses/NotFound"
+                }
+            }
+            tags:
+               - orders
+     

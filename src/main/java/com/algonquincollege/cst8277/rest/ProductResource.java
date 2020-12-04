@@ -13,6 +13,8 @@ import static com.algonquincollege.cst8277.utils.MyConstants.CUSTOMER_RESOURCE_N
 import static com.algonquincollege.cst8277.utils.MyConstants.PRODUCT_RESOURCE_NAME;
 import static com.algonquincollege.cst8277.utils.MyConstants.RESOURCE_PATH_ID_ELEMENT;
 import static com.algonquincollege.cst8277.utils.MyConstants.RESOURCE_PATH_ID_PATH;
+import static com.algonquincollege.cst8277.utils.MyConstants.RESOURCE_PATH_PRODUCT_ID_ELEMENT;
+import static com.algonquincollege.cst8277.utils.MyConstants.RESOURCE_PATH_STORE_ID_ELEMENT;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 import static javax.ws.rs.core.Response.Status.OK;
 
@@ -25,6 +27,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -81,6 +84,16 @@ public class ProductResource {
       ProductPojo saveCustomerPojo = customerServiceBean.persistProduct(newProduct);
       response = Response.ok(newProduct).build();
       return response;
+    }
+
+    @PUT
+    @Path("/addProductToStore/{productId}/{storeId}")
+    public Response addProductToStore(@PathParam(RESOURCE_PATH_PRODUCT_ID_ELEMENT) int productId,
+        @PathParam(RESOURCE_PATH_STORE_ID_ELEMENT) int storeId) {
+        Response response = null;
+        ProductPojo updatedProduct = customerServiceBean.linkProductAndStore(productId, storeId);
+        response = Response.ok(updatedProduct).build();
+        return response;
     }
 
 }

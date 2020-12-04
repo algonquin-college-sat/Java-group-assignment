@@ -41,6 +41,7 @@ import javax.security.enterprise.identitystore.Pbkdf2PasswordHash;
 import javax.servlet.ServletContext;
 import com.algonquincollege.cst8277.models.AddressPojo;
 import com.algonquincollege.cst8277.models.CustomerPojo;
+import com.algonquincollege.cst8277.models.OrderLinePk;
 import com.algonquincollege.cst8277.models.OrderLinePojo;
 import com.algonquincollege.cst8277.models.OrderPojo;
 import com.algonquincollege.cst8277.models.ProductPojo;
@@ -240,12 +241,7 @@ public class CustomerService implements Serializable {
         }
         return result;
     }
-    /*
-     * 
-     * public OrderPojo getAllOrders ... getOrderbyId ... build Orders with OrderLines ...
-     * 
-     */
-
+    
     public OrderPojo getOrderById(int orderPK) {
         try {
             CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -253,7 +249,11 @@ public class CustomerService implements Serializable {
             Root<OrderPojo> c = q.from(OrderPojo.class);
             q.where(cb.equal(c.get("id"), orderPK));
             TypedQuery<OrderPojo> q2 = em.createQuery(q);
-            return q2.getSingleResult();
+            if(q2.getResultList().size() > 0) {
+                return q2.getSingleResult();
+            } else {
+                return null;
+            }
         }
         catch (Exception e) {
             servletContext.log("Error during calling getOrderById function.", e);
@@ -294,9 +294,28 @@ public class CustomerService implements Serializable {
     }
 
     @Transactional
-    public OrderLinePojo persistOrderLine(OrderLinePojo newOrderLine) {
-        em.persist(newOrderLine);
-        return newOrderLine;
+    public OrderLinePojo persistOrderLine(int productPK, int orderPK, double amount) {
+        int numberOfLines = 0;
+        ProductPojo productToAdd = em.find(ProductPojo.class, productPK);
+        OrderPojo orderToUpdate = em.find(OrderPojo.class, orderPK);
+        List<OrderLinePojo> orderLines = getAllOrderLines(orderPK);
+        if(orderLines != null) {
+            numberOfLines = orderLines.size();
+        }
+        
+        if(productToAdd != null && orderToUpdate != null) {
+            OrderLinePojo orderLinePojo = new OrderLinePojo();
+            orderLinePojo.setOwningOrder(orderToUpdate);
+            orderLinePojo.setProduct(productToAdd);
+            orderLinePojo.setAmount(amount);
+            OrderLinePk newOrderLinePk = new OrderLinePk();
+            newOrderLinePk.setOrderLineNo(numberOfLines+1);
+            newOrderLinePk.setOwningOrderId(orderToUpdate.getId());
+            orderLinePojo.setPk(newOrderLinePk);
+            em.persist(orderLinePojo);
+            return orderLinePojo;
+        }
+        return null;
     }
 
     @Transactional
@@ -307,6 +326,28 @@ public class CustomerService implements Serializable {
             return true;
         }
         return false;
+    }
+
+    @Transactional
+    public ProductPojo linkProductAndStore(int productId, int storeId) {
+        ProductPojo productToUpdate = em.find(ProductPojo.class, productId);
+        StorePojo storeToUpdate = em.find(StorePojo.class, storeId);
+        if(productToUpdate != null && storeToUpdate != null) {
+            productToUpdate.getStores().add(storeToUpdate);
+        }
+        return productToUpdate;
+    }
+
+        
+    public List<OrderLinePojo> getAllOrderLines(int orderPK) {
+        OrderPojo foundOrder = em.find(OrderPojo.class, orderPK);
+        
+        if(foundOrder != null && foundOrder.getOrderlines() != null) {
+            return foundOrder.getOrderlines();
+        }
+        
+        return null;
+       
     }
 
 }

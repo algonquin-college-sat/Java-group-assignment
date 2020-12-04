@@ -11,6 +11,7 @@ package com.algonquincollege.cst8277.models;
 import java.io.Serializable;
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
@@ -19,6 +20,7 @@ public class OrderLinePk implements Serializable {
     private static final long serialVersionUID = 1L;
 
     protected int owningOrderId;
+    
     protected int orderLineNo;
 
     public int getOwningOrderId() {

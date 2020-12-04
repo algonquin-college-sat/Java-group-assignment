@@ -12,6 +12,10 @@ package com.algonquincollege.cst8277.rest;
 import static com.algonquincollege.cst8277.utils.MyConstants.ADMIN_ROLE;
 import static com.algonquincollege.cst8277.utils.MyConstants.ORDER_RESOURCE_NAME;
 import static com.algonquincollege.cst8277.utils.MyConstants.RESOURCE_PATH_ID_ELEMENT;
+import static com.algonquincollege.cst8277.utils.MyConstants.RESOURCE_PATH_PRODUCT_ID_ELEMENT;
+import static com.algonquincollege.cst8277.utils.MyConstants.RESOURCE_PATH_STORE_ID_ELEMENT;
+import static com.algonquincollege.cst8277.utils.MyConstants.RESOURCE_PATH_ORDER_ID_ELEMENT;
+import static com.algonquincollege.cst8277.utils.MyConstants.RESOURCE_PATH_AMOUNT_ELEMENT;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 import static javax.ws.rs.core.Response.Status.OK;
@@ -34,7 +38,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.algonquincollege.cst8277.ejb.CustomerService;
+import com.algonquincollege.cst8277.models.OrderLinePojo;
 import com.algonquincollege.cst8277.models.OrderPojo;
+import com.algonquincollege.cst8277.models.ProductPojo;
 
 @Path(ORDER_RESOURCE_NAME)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -90,4 +96,29 @@ public class OrderResource {
       return response;
     }
 
+    @PUT
+    @Path("/addOrderLineToOder/{productId}/{orderId}/{amount}")
+    public Response addOrderLine(@PathParam(RESOURCE_PATH_PRODUCT_ID_ELEMENT) int productId,
+        @PathParam(RESOURCE_PATH_ORDER_ID_ELEMENT) int orderId,
+        @PathParam(RESOURCE_PATH_AMOUNT_ELEMENT) double amount) {
+      Response response = null;
+      OrderLinePojo savedOrderLine = customerServiceBean.persistOrderLine(productId, orderId, amount);
+      savedOrderLine.setOwningOrder(null);
+      response = Response.ok(savedOrderLine).build();
+      return response;
+    }
+
+    @GET
+    @Path("/orderLines/{orderId}")
+    public Response getAllOrderLines(@PathParam(RESOURCE_PATH_ORDER_ID_ELEMENT) int orderId) {
+      Response response = null;
+      List<OrderLinePojo> orderLines = customerServiceBean.getAllOrderLines(orderId);
+      orderLines.forEach(
+          s-> {
+              s.setOwningOrder(null);
+          });
+      response = Response.ok(orderLines).build();
+      return response;
+    }
+    
 }
