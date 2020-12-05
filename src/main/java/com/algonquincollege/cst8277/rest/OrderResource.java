@@ -13,6 +13,8 @@ import static com.algonquincollege.cst8277.utils.MyConstants.ADMIN_ROLE;
 import static com.algonquincollege.cst8277.utils.MyConstants.ORDER_RESOURCE_NAME;
 import static com.algonquincollege.cst8277.utils.MyConstants.RESOURCE_PATH_ID_ELEMENT;
 import static com.algonquincollege.cst8277.utils.MyConstants.RESOURCE_PATH_PRODUCT_ID_ELEMENT;
+import static com.algonquincollege.cst8277.utils.MyConstants.RESOURCE_PATH_ORDER_LINE_NUMBER_ELEMENT;
+import static com.algonquincollege.cst8277.utils.MyConstants.RESOURCE_PATH_ORDER_LINE_AMOUNT_ELEMENT;
 import static com.algonquincollege.cst8277.utils.MyConstants.RESOURCE_PATH_STORE_ID_ELEMENT;
 import static com.algonquincollege.cst8277.utils.MyConstants.RESOURCE_PATH_ORDER_ID_ELEMENT;
 import static com.algonquincollege.cst8277.utils.MyConstants.RESOURCE_PATH_AMOUNT_ELEMENT;
@@ -103,11 +105,37 @@ public class OrderResource {
         @PathParam(RESOURCE_PATH_AMOUNT_ELEMENT) double amount) {
       Response response = null;
       OrderLinePojo savedOrderLine = customerServiceBean.persistOrderLine(productId, orderId, amount);
-      savedOrderLine.setOwningOrder(null);
+      if(savedOrderLine != null) {
+          savedOrderLine.setOwningOrder(null);
+      }
       response = Response.ok(savedOrderLine).build();
       return response;
     }
 
+    @PUT
+    @Path("/deleteOrderLineToOder/{orderLineNumber}/{orderId}")
+    public Response addOrderLine(@PathParam(RESOURCE_PATH_ORDER_LINE_NUMBER_ELEMENT) int orderLineNumber,
+        @PathParam(RESOURCE_PATH_ORDER_ID_ELEMENT) int orderId) {
+      Response response = null;
+      Boolean result = customerServiceBean.deleteOrderLine(orderLineNumber, orderId);
+      response = Response.ok(result).build();
+      return response;
+    }
+
+    @PUT
+    @Path("/updateOrderLineToOder/{orderLineNumber}/{orderId}/{amount}")
+    public Response updateOrderLine(@PathParam(RESOURCE_PATH_ORDER_LINE_NUMBER_ELEMENT) int orderLineNumber,
+        @PathParam(RESOURCE_PATH_ORDER_ID_ELEMENT) int orderId, @PathParam(RESOURCE_PATH_ORDER_LINE_AMOUNT_ELEMENT) double amount) {
+      Response response = null;
+      OrderLinePojo result = customerServiceBean.updateOrderLine(orderLineNumber, orderId, amount);
+      if(result != null) {
+          result.setOwningOrder(null);
+      }
+      response = Response.ok(result).build();
+      return response;
+    }
+
+    
     @GET
     @Path("/orderLines/{orderId}")
     public Response getAllOrderLines(@PathParam(RESOURCE_PATH_ORDER_ID_ELEMENT) int orderId) {

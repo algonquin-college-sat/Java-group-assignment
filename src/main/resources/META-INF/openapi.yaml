@@ -733,4 +733,80 @@ paths:
             }
             tags:
                - orders
-     
+    /order/deleteOrderLineToOder/{orderLineNumber}/{orderId}:
+       put:
+            summary: "Delete order line from order"
+            parameters:
+                - name: "orderLineNumber"
+                  in: "path"
+                  description: "Order Line Number"
+                  required: true
+                  type: "integer"
+                  format: "int64"
+                - name: "orderId"
+                  in: "path"
+                  description: "Order Id"
+                  required: true
+                  type: "integer"
+                  format: "int64"
+            responses: {
+                "204": {
+                    description: "Ok (No content, successful operation)"
+                },
+                "401": {
+                    $ref: "#/components/responses/UnauthorizedUserError"
+                },
+                "403": {
+                    $ref: "#/components/responses/ForbiddenError"
+                },
+                "404": {
+                    $ref: "#/components/responses/NotFound"
+                }
+            }
+            tags:
+               - orders
+    /order/updateOrderLineToOder/{orderLineNumber}/{orderId}/{amount}:
+       put:
+            summary: "Update order line"
+            parameters:
+                - name: "orderLineNumber"
+                  in: "path"
+                  description: "Order Line Number"
+                  required: true
+                  type: "integer"
+                  format: "int64"
+                - name: "orderId"
+                  in: "path"
+                  description: "Order Id"
+                  required: true
+                  type: "integer"
+                  format: "int64"
+                - name: "amount"
+                  in: "path"
+                  description: "Amount"
+                  required: true
+                  type: "number"
+                  format: "float"
+            responses: {
+                "200": {
+                    description: "Ok (Successful operation)",
+                    content: {
+                        application/json: {
+                            schema: {
+                                $ref: "#/components/schemas/OrderLine"
+                            }
+                        }
+                    }
+                },
+                "401": {
+                    $ref: "#/components/responses/UnauthorizedUserError"
+                },
+                "403": {
+                    $ref: "#/components/responses/ForbiddenError"
+                },
+                "404": {
+                    $ref: "#/components/responses/NotFound"
+                }
+            }
+            tags:
+               - orders     

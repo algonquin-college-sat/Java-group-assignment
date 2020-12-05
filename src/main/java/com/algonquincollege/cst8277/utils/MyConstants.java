@@ -35,6 +35,8 @@ public interface MyConstants {
     public static final String APPLICATION_CONTEXT_ROOT = SLASH + "rest-employeeSystem";
     public static final String RESOURCE_PATH_ID_ELEMENT =  "id";
     public static final String RESOURCE_PATH_PRODUCT_ID_ELEMENT =  "productId";
+    public static final String RESOURCE_PATH_ORDER_LINE_NUMBER_ELEMENT =  "orderLineNumber";
+    public static final String RESOURCE_PATH_ORDER_LINE_AMOUNT_ELEMENT =  "amount";
     public static final String RESOURCE_PATH_STORE_ID_ELEMENT =  "storeId";
     public static final String RESOURCE_PATH_ORDER_ID_ELEMENT =  "orderId";
     public static final String RESOURCE_PATH_AMOUNT_ELEMENT =  "amount";

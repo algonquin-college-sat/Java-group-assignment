@@ -350,4 +350,54 @@ public class CustomerService implements Serializable {
        
     }
 
+    public Boolean deleteOrderLine(int orderLineNumber, int orderId) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<OrderLinePojo> q = cb.createQuery(OrderLinePojo.class);
+        Root<OrderLinePojo> c = q.from(OrderLinePojo.class);
+        OrderLinePk orderLinePk =  new OrderLinePk();
+        orderLinePk.setOwningOrderId(orderId);
+        orderLinePk.setOrderLineNo(orderLineNumber);
+        q.where(cb.equal(c.get("primaryKey"), orderLinePk));
+        TypedQuery<OrderLinePojo> q2 = em.createQuery(q);
+        
+        if(q2.getResultList().size() > 0) {
+            OrderLinePojo orderLineToDelete = q2.getSingleResult();
+            if(orderLineToDelete != null) {
+                em.remove(orderLineToDelete);
+                return true;
+            }
+        } else {
+            servletContext.log("Error during calling deleteOrderLine function. For orderLineNumber="+orderLineNumber+"  orderId="+orderId);
+            return false;
+        }
+
+        servletContext.log("Error during calling deleteOrderLine function. For orderLineNumber="+orderLineNumber+"  orderId="+orderId);
+        return false;
+    }
+
+    public OrderLinePojo updateOrderLine(int orderLineNumber, int orderId, double newAmount) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<OrderLinePojo> q = cb.createQuery(OrderLinePojo.class);
+        Root<OrderLinePojo> c = q.from(OrderLinePojo.class);
+        OrderLinePk orderLinePk =  new OrderLinePk();
+        orderLinePk.setOwningOrderId(orderId);
+        orderLinePk.setOrderLineNo(orderLineNumber);
+        q.where(cb.equal(c.get("primaryKey"), orderLinePk));
+        TypedQuery<OrderLinePojo> q2 = em.createQuery(q);
+        
+        if(q2.getResultList().size() > 0) {
+            OrderLinePojo orderLineToUpdate = q2.getSingleResult();
+            if(orderLineToUpdate != null) {
+                orderLineToUpdate.setAmount(newAmount);
+                em.persist(orderLineToUpdate);
+                return orderLineToUpdate;
+            }
+        } else {
+            servletContext.log("Error during calling updateOrderLine function. For orderLineNumber="+orderLineNumber+"  orderId="+orderId);
+            return null;
+        }
+
+        servletContext.log("Error during calling updateOrderLine function. For orderLineNumber="+orderLineNumber+"  orderId="+orderId);
+        return null;
+    }
 }
