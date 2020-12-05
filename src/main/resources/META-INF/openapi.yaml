@@ -257,7 +257,6 @@ paths:
             }
             tags:
                - customers
-            
         delete:
             summary: "Removes a customer by its id"
             parameters: [{
@@ -279,6 +278,55 @@ paths:
             }
             tags:
                - customers
+    /customer/addAddressForCustomer/{id}:
+        put:
+            requestBody: {
+                description: "new customer to be added to Db",
+                required: true,
+                content: {
+                    application/json: {
+                        schema: {
+                            $ref: "#/components/schemas/Address"
+                        }
+                    }
+                }
+            }
+            summary: "Link address with customer"
+            required: true,
+            content: {
+                application/json: {
+                    schema: {
+                        $ref: "#/components/schemas/Address"
+                    }
+                }
+            }
+            parameters: [{
+                $ref: "#/components/parameters/idPathParam"
+            }]
+            responses: {
+                "200": {
+                    description: "Ok (Successful operation)",
+                    content: {
+                        application/json: {
+                            schema: {
+                                $ref: "#/components/schemas/Customer"
+                            }
+                        }
+                    }
+                },
+                "401": {
+                    $ref: "#/components/responses/UnauthorizedUserError"
+                },
+                "403": {
+                    $ref: "#/components/responses/ForbiddenError"
+                },
+                "404": {
+                    $ref: "#/components/responses/NotFound"
+                }
+            }
+            tags:
+               - customers
+            
     /store:
         get:
             responses: {

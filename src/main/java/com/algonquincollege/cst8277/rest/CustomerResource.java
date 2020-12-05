@@ -124,13 +124,12 @@ public class CustomerResource {
       return response;
     }
 
+    @PUT
+    @Path("/addAddressForCustomer/{id}")
     public Response addAddressForCustomer(@PathParam(RESOURCE_PATH_ID_ELEMENT) int id, AddressPojo newAddress) {
       Response response = null;
       CustomerPojo updatedCustomer = customerServiceBean.setAddressFor(id, newAddress);
       response = Response.ok(updatedCustomer).build();
       return response;
     }
-    
-    //TODO - endpoints for setting up Orders/OrderLines
-
 }

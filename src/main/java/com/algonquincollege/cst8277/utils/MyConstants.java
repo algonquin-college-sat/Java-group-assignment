@@ -80,5 +80,5 @@ public interface MyConstants {
     //JPA constants
     public static final String PU_NAME = "assignment4-PU";
     public static final String PARAM1 = "param1";
-
+    public static final String PARAM_CUST_ROLE_NAME = "custRoleName";
 }

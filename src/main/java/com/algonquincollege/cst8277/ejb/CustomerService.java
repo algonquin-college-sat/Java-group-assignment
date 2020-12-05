@@ -22,6 +22,7 @@ import static com.algonquincollege.cst8277.utils.MyConstants.PROPERTY_ITERATIONS
 import static com.algonquincollege.cst8277.utils.MyConstants.PROPERTY_KEYSIZE;
 import static com.algonquincollege.cst8277.utils.MyConstants.PROPERTY_SALTSIZE;
 import static com.algonquincollege.cst8277.utils.MyConstants.USER_ROLE;
+import static com.algonquincollege.cst8277.utils.MyConstants.PARAM_CUST_ROLE_NAME;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -126,11 +127,10 @@ public class CustomerService implements Serializable {
         String pwHash = pbAndjPasswordHash.generate(DEFAULT_USER_PASSWORD.toCharArray());
         userForNewCustomer.setPwHash(pwHash);
         userForNewCustomer.setCustomer(newCustomerWithIdTimestamps);
-        /**SecurityRole userRole = em.createNamedQuery(ROLE_BY_NAME_QUERY,
-        SecurityRole.class).setParameter(PARAM1, USER_ROLE).getSingleResult();
+        SecurityRole userRole = em.createNamedQuery(ROLE_BY_NAME_QUERY, SecurityRole.class)
+            .setParameter(PARAM_CUST_ROLE_NAME, USER_ROLE).getSingleResult();
         userForNewCustomer.getRoles().add(userRole);
         userRole.getUsers().add(userForNewCustomer);
-        **/
         em.persist(userForNewCustomer);
     }
 
