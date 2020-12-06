@@ -5,6 +5,8 @@
  * @author (original) Mike Norman
  * 
  * update by : Hanna Bernyk 040904190
+ * update by : Oladotun Akinlabi 040892548
+ * update by : Jeffrey Sharpe 040936079
  *
  */
 package com.algonquincollege.cst8277.rest;
@@ -51,15 +53,29 @@ import com.algonquincollege.cst8277.models.SecurityUser;
 @Produces(MediaType.APPLICATION_JSON)
 public class CustomerResource {
 
+    /**
+     * Inject Customer Service
+     */
     @EJB
     protected CustomerService customerServiceBean;
 
+    /**
+     * Inject Servlet Context
+     */
     @Inject
     protected ServletContext servletContext;
 
+    /**
+     * Inject Security Context
+     */
     @Inject
     protected SecurityContext sc;
 
+
+    /**
+     * @return Response. Get all customers
+     * 
+     */
     @RolesAllowed({"ADMIN_ROLE"})
     @GET
     public Response getCustomers() {
@@ -69,6 +85,11 @@ public class CustomerResource {
         return response;
     }
 
+    /**
+     * 
+     * @param id. Customer Id
+     * @return Response. Return Selected Customer by Id
+     */
     @GET
     @Path("{id}")
     public Response getCustomerById(@PathParam(RESOURCE_PATH_ID_ELEMENT) int id) {
@@ -97,6 +118,11 @@ public class CustomerResource {
         return response;
     }
 
+    /**
+     * 
+     * @param id. Customer Id
+     * @return Response. Result of customer deleting
+     */
     @DELETE
     @Path("{id}")
     public Response deleteCustomerById(@PathParam(RESOURCE_PATH_ID_ELEMENT) int id) {
@@ -106,17 +132,15 @@ public class CustomerResource {
 
         result = customerServiceBean.deleteCustomerById(id);
         response = Response.status( result == false ? NOT_FOUND : OK).entity(result).build();
-        /*
-         * if (sc.isCallerInRole(ADMIN_ROLE)) {
-         * result = customerServiceBean.deleteCustomerById(id);
-         * response = Response.status( result == false ? NOT_FOUND : OK).entity(result).build();
-         * }else {
-         * response = Response.status(BAD_REQUEST).build();
-         * }
-         */        return response;
+        return response;
     }
 
-    
+
+    /**
+     * 
+     * @param newCustomer
+     * @return Response. Return saved new customer
+     */
     @POST
     public Response addCustomer(CustomerPojo newCustomer) {
       Response response = null;
@@ -125,6 +149,12 @@ public class CustomerResource {
       return response;
     }
 
+    /**
+     * 
+     * @param id. Customer id.
+     * @param newAddress. New Address
+     * @return Response. Return updated Customer
+     */
     @RolesAllowed({"ADMIN_ROLE", "USER_ROLE"})
     @PUT
     @Path("/addAddressForCustomer/{id}")

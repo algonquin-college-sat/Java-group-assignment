@@ -4,7 +4,9 @@
  *
  * @author (original) Mike Norman
  * 
- * update by : I. Am. A. Student 040nnnnnnn
+ * update by : Hanna Bernyk 040904190
+ * update by : Oladotun Akinlabi 040892548
+ * update by : Jeffrey Sharpe 040936079
  *
  */
 package com.algonquincollege.cst8277.rest;
@@ -34,12 +36,23 @@ import com.algonquincollege.cst8277.models.SecurityUser;
 @Produces(MediaType.APPLICATION_JSON)
 public class CredentialResource {
 
+    /**
+     * Inject Servlet Context
+     */
     @Inject
     protected ServletContext servletContext;
 
+    /**
+     * Security Context
+     */
     @Inject
     protected SecurityContext securityContent;
 
+    /**
+     * Get credentials
+     * 
+     * @return Response. Returns the Credentials
+     */
     @GET
     public Response getCredentials() {
         servletContext.log("testing credentials ...");

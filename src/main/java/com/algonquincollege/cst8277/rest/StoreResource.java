@@ -5,6 +5,8 @@
  * @author (original) Mike Norman
  * 
  * update by : Hanna Bernyk 040904190
+ * update by : Oladotun Akinlabi 040892548
+ * update by : Jeffrey Sharpe 040936079
  *
  */
 package com.algonquincollege.cst8277.rest;
@@ -18,6 +20,7 @@ import static javax.ws.rs.core.Response.Status.OK;
 
 import java.util.List;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
@@ -40,12 +43,25 @@ import com.algonquincollege.cst8277.models.StorePojo;
 @Produces(MediaType.APPLICATION_JSON)
 public class StoreResource {
 
+    /**
+     * Inject Customer Service
+     */
     @EJB
     protected CustomerService customerServiceBean;
 
+    /**
+     * Inject Servlet Context
+     */
     @Inject
     protected ServletContext servletContext;
 
+    
+    /**
+     * Get All Stores
+     * 
+     * @return Response. Returns all stores
+     */
+    @RolesAllowed({"ADMIN_ROLE", "USER_ROLE"})
     @GET
     public Response getStores() {
         servletContext.log("retrieving all stores ...");
@@ -54,6 +70,13 @@ public class StoreResource {
         return response;
     }
 
+    /**
+     * Get Store by Id
+     * 
+     * @param id. Store Id
+     * @return Response. Returns found store
+     */
+    @RolesAllowed({"ADMIN_ROLE", "USER_ROLE"})
     @GET
     @Path("{id}")
     public Response getStoreById(@PathParam(RESOURCE_PATH_ID_ELEMENT) int id) {
@@ -63,6 +86,14 @@ public class StoreResource {
         return response;
     }
 
+    
+    /**
+     * Add new Store
+     * 
+     * @param newStore
+     * @return Response. Returns saved new store
+     */
+    @RolesAllowed({"ADMIN_ROLE"})
     @POST
     public Response addStore(StorePojo newStore) {
       Response response = null;
@@ -71,6 +102,13 @@ public class StoreResource {
       return response;
     }
 
+    /**
+     * Delete Store by Id
+     * 
+     * @param id. Store Id.
+     * @return Response. Returns the result of deleting(true - SUCCESS, false - FAILD)
+     */
+    @RolesAllowed({"ADMIN_ROLE"})
     @DELETE
     @Path("{id}")
     public Response deleteStoreById(@PathParam(RESOURCE_PATH_ID_ELEMENT) int id) {

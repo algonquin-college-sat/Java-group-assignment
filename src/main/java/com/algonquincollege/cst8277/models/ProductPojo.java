@@ -5,6 +5,9 @@
  * @author (original) Mike Norman
  * 
  * update by : Hanna Bernyk 040904190
+ * update by : Oladotun Akinlabi 040892548
+ * update by : Jeffrey Sharpe 040936079
+ * 
  */
 package com.algonquincollege.cst8277.models;
 

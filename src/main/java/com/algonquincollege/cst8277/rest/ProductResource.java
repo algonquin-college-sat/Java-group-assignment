@@ -5,6 +5,8 @@
  * @author (original) Mike Norman
  * 
  * update by : Hanna Bernyk 040904190
+ * update by : Oladotun Akinlabi 040892548
+ * update by : Jeffrey Sharpe 040936079
  *
  */
 package com.algonquincollege.cst8277.rest;
@@ -20,6 +22,7 @@ import static javax.ws.rs.core.Response.Status.OK;
 
 import java.util.List;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
@@ -43,12 +46,24 @@ import com.algonquincollege.cst8277.models.ProductPojo;
 @Produces(MediaType.APPLICATION_JSON)
 public class ProductResource {
 
+    /**
+     * Inject Customer Service
+     */
     @EJB
     protected CustomerService customerServiceBean;
 
+    /**
+     * Inject Servlet Context
+     */
     @Inject
     protected ServletContext servletContext;
 
+    /**
+     * Get All Products
+     * 
+     * @return Response. Returns all products
+     */
+    @RolesAllowed({"ADMIN_ROLE", "USER_ROLE"})
     @GET
     public Response getProducts() {
         servletContext.log("retrieving all products ...");
@@ -57,6 +72,13 @@ public class ProductResource {
         return response;
     }
 
+    /**
+     * Get Product by Id
+     * 
+     * @param id. Product Id
+     * @return Response. Returns found product.
+     */
+    @RolesAllowed({"ADMIN_ROLE", "USER_ROLE"})
     @GET
     @Path("{id}")
     public Response getProductById(@PathParam(RESOURCE_PATH_ID_ELEMENT) int id) {
@@ -66,6 +88,13 @@ public class ProductResource {
         return response;
     }
 
+    /**
+     * Delete Product by Id.
+     * 
+     * @param id. Product Id
+     * @return Response. Returns the result of deleting(true - SUCCESS, false - FAILD)
+     */
+    @RolesAllowed({"ADMIN_ROLE"})
     @DELETE
     @Path("{id}")
     public Response deleteProductById(@PathParam(RESOURCE_PATH_ID_ELEMENT) int id) {
@@ -78,6 +107,13 @@ public class ProductResource {
         return response;
     }
 
+    /**
+     * Add new Product
+     * 
+     * @param newProduct. New product for saving
+     * @return Response. Returns saved product
+     */
+    @RolesAllowed({"ADMIN_ROLE"})
     @POST
     public Response addProduct(ProductPojo newProduct) {
       Response response = null;
@@ -86,6 +122,14 @@ public class ProductResource {
       return response;
     }
 
+    /**
+     * Link Product and Store
+     * 
+     * @param productId
+     * @param storeId
+     * @return Response. Returns updated product
+     */
+    @RolesAllowed({"ADMIN_ROLE"})
     @PUT
     @Path("/addProductToStore/{productId}/{storeId}")
     public Response addProductToStore(@PathParam(RESOURCE_PATH_PRODUCT_ID_ELEMENT) int productId,

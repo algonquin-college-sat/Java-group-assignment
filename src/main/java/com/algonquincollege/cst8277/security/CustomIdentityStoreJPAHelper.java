@@ -4,7 +4,10 @@
  *
  * @author (original) Mike Norman
  * 
- * update by : I. Am. A. Student 040nnnnnnn
+ * update by : Hanna Bernyk 040904190
+ * update by : Oladotun Akinlabi 040892548
+ * update by : Jeffrey Sharpe 040936079
+ * 
  */
 package com.algonquincollege.cst8277.security;
 
@@ -35,9 +38,18 @@ import com.algonquincollege.cst8277.models.SecurityUser;
 public class CustomIdentityStoreJPAHelper {
     public static final String CUSTOMER_PU = "acmeCustomers-PU";
 
+    /**
+     * Inject Entity Manager
+     */
     @PersistenceContext(name = CUSTOMER_PU)
     protected EntityManager em;
 
+    /**
+     * Find User by Name
+     * 
+     * @param username.
+     * @return SecurityUser. Returns found Security User
+     */
     public SecurityUser findUserByName(String username) {
         SecurityUser user = null;
         try {
@@ -54,6 +66,13 @@ public class CustomIdentityStoreJPAHelper {
         return user;
     }
 
+    /**
+     * Find set of Role Names for user
+     * 
+     * @param username
+     * @return Set<String>. Returns set of Role Names by username
+     */
+    
     public Set<String> findRoleNamesForUser(String username) {
         Set<String> roleNames = emptySet();
         SecurityUser securityUser = findUserByName(username);
@@ -63,6 +82,12 @@ public class CustomIdentityStoreJPAHelper {
         return roleNames;
     }
 
+    /**
+     * Save SecurityUser
+     * 
+     * @param user
+     */
+    
     @Transactional
     public void saveSecurityUser(SecurityUser user) {
         if(user != null) {
@@ -70,6 +95,12 @@ public class CustomIdentityStoreJPAHelper {
         }
     }
 
+    /**
+     * Save SecurityRole
+     * 
+     * @param role
+     */
+    
     @Transactional
     public void saveSecurityRole(SecurityRole role) {
         if(role != null) {

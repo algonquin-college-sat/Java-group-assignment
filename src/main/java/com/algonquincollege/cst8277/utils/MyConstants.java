@@ -22,6 +22,9 @@ public List<Project> getProjects({@literal @}PathParam("<b><u>emailId</u></b>") 
 </pre></blockquote>
  *
  * @author mwnorman
+ * update by : Hanna Bernyk 040904190
+ * update by : Oladotun Akinlabi 040892548
+ * update by : Jeffrey Sharpe 040936079
  */
 public interface MyConstants {
 

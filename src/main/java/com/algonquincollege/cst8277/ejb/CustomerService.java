@@ -5,6 +5,8 @@
  * @author (original) Mike Norman
  * 
  * update by : Hanna Bernyk 040904190
+ * update by : Oladotun Akinlabi 040892548
+ * update by : Jeffrey Sharpe 040936079
  *
  */
 package com.algonquincollege.cst8277.ejb;
@@ -56,16 +58,35 @@ import com.algonquincollege.cst8277.models.StorePojo;
  */
 @Singleton
 public class CustomerService implements Serializable {
+    /**
+     * Define constants
+     */
     private static final long serialVersionUID = 1L;
     public static final String CUSTOMER_PU = "acmeCustomers-PU";
+
+    /**
+     * Inject Entity Manager
+     */
     @PersistenceContext(name = CUSTOMER_PU)
     protected EntityManager em;
+    
+    /**
+     * Inject Servlet Context
+     */
     @Inject
     protected ServletContext servletContext;
+    
+    /**
+     * Inject Pbkdf2PasswordHash
+     */
     @Inject
     protected Pbkdf2PasswordHash pbAndjPasswordHash;
-    // TODO
 
+    /**
+     * Get All customers
+     * 
+     * @return List<CustomerPojo>. Returns all customers.
+     */
     public List<CustomerPojo> getAllCustomers() {
         try {
             CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -82,6 +103,12 @@ public class CustomerService implements Serializable {
         }
     }
 
+    /**
+     * Get Customer by Id
+     * 
+     * @param custPK. Customer Id
+     * @return CustomerPojo. Returns found customer
+     */
     public CustomerPojo getCustomerById(int custPK) {
         try {
             CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -97,6 +124,12 @@ public class CustomerService implements Serializable {
         }
     }
 
+    /**
+     * Delete Customer by Id
+     * 
+     * @param custPK. Customer Id
+     * @return Boolean. Returns the result of opperation (true - SUCCESS, false - FAILD)
+     */
     @Transactional
     public Boolean deleteCustomerById(int custPK) {
         CustomerPojo customerToDelete = em.find(CustomerPojo.class, custPK);
@@ -108,12 +141,23 @@ public class CustomerService implements Serializable {
     }
 
     
+    /**
+     * Persist Customer.
+     * 
+     * @param newCustomer. Customer for saving.
+     * @return CustomerPojo. Returns saved customer
+     */
     @Transactional
     public CustomerPojo persistCustomer(CustomerPojo newCustomer) {
         buildUserForNewCustomer(newCustomer);
         return newCustomer;
     }
 
+    /**
+     * Create a new SecurityUser and a new Customer
+     * 
+     * @param newCustomerWithIdTimestamps
+     */
     @Transactional
     public void buildUserForNewCustomer(CustomerPojo newCustomerWithIdTimestamps) {
         SecurityUser userForNewCustomer = new SecurityUser();
@@ -134,6 +178,13 @@ public class CustomerService implements Serializable {
         em.persist(userForNewCustomer);
     }
 
+    /**
+     * Set Address for a customer
+     * 
+     * @param custId. Customer Id
+     * @param newAddress. new Address
+     * @return CustomerPojo. Return updated Customer
+     */
     @Transactional
     public CustomerPojo setAddressFor(int custId, AddressPojo newAddress) {
         CustomerPojo updatedCustomer = em.find(CustomerPojo.class, custId);
@@ -147,6 +198,11 @@ public class CustomerService implements Serializable {
         return updatedCustomer;
     }
 
+    /**
+     * Get All products
+     * 
+     * @return List<ProductPojo>. Returns the list of all products
+     */
     public List<ProductPojo> getAllProducts() {
         // example of using JPA Criteria query instead of JPQL
         try {
@@ -163,6 +219,12 @@ public class CustomerService implements Serializable {
         }
     }
 
+    /**
+     * Get Product by Id
+     * 
+     * @param prodPK. Product Id
+     * @return ProductPojo. Returns found product
+     */
     public ProductPojo getProductById(int prodPK) {
         try {
             CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -178,12 +240,24 @@ public class CustomerService implements Serializable {
         }
     }
 
+    /**
+     * Persist Product
+     * 
+     * @param newProduct. Product for saving
+     * @return ProductPojo. Returns updated/saved product
+     */
     @Transactional
     public ProductPojo persistProduct(ProductPojo newProduct) {
         em.persist(newProduct);
         return newProduct;
     }
 
+    /**
+     * Delete product by Id/
+     * 
+     * @param prodId. Product Id
+     * @return Boolean. Returns the result of deleting(true - SUCCESS, false - FAILD)
+     */
     @Transactional
     public Boolean deleteProductById(int prodId) {
         Boolean result = false;
@@ -195,6 +269,11 @@ public class CustomerService implements Serializable {
         return result;
     }
     
+    /**
+     * Get All Stores
+     * 
+     * @return List<StorePojo>. Returns all stores
+     */
     public List<StorePojo> getAllStores() {
         try {
             CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -210,6 +289,12 @@ public class CustomerService implements Serializable {
         }
     }
 
+    /**
+     * Get Store by Id
+     * 
+     * @param storePK. Store Id
+     * @return StorePojo. Returns found Store
+     */
     public StorePojo getStoreById(int storePK) {
         try {
             CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -225,12 +310,24 @@ public class CustomerService implements Serializable {
         }
     }
 
+    /**
+     * Save store
+     * 
+     * @param newStore
+     * @return StorePojo. Returns saved/updated store
+     */
     @Transactional
     public StorePojo persistStore(StorePojo newStore) {
         em.persist(newStore);
         return newStore;
     }
     
+    /**
+     * Delete Store by Id
+     * 
+     * @param storeId. Store Id
+     * @return Boolean. Returns the result of deleting(true - SUCCESS, false - FAILD)
+     */
     @Transactional
     public Boolean deleteStoreById(int storeId) {
         Boolean result = false;
@@ -242,6 +339,12 @@ public class CustomerService implements Serializable {
         return result;
     }
     
+    /**
+     * Get Order by Id
+     * 
+     * @param orderPK. Order Id
+     * @return OrderPojo. Returns found order
+     */
     public OrderPojo getOrderById(int orderPK) {
         try {
             CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -261,6 +364,11 @@ public class CustomerService implements Serializable {
         }
     }
 
+    /**
+     * Get All Orders
+     * 
+     * @return List<OrderPojo>. Returns all orders
+     */
     public List<OrderPojo> getAllOrders() {
         try {
             CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -276,12 +384,24 @@ public class CustomerService implements Serializable {
         }
     }
     
+    /**
+     * Save Order
+     * 
+     * @param newOrder
+     * @return OrderPojo. Returns saved/updated Order
+     */
     @Transactional
     public OrderPojo persistOrder(OrderPojo newOrder) {
         em.persist(newOrder);
         return newOrder;
     }
     
+    /**
+     * Delete Order By Id
+     * 
+     * @param orderId. Order Id
+     * @return Boolean. Returns the result of deleting(true - SUCCESS, false - FAILD)
+     */
     @Transactional
     public Boolean deleteOrderById(int orderId) {
         Boolean result = false;
@@ -293,6 +413,15 @@ public class CustomerService implements Serializable {
         return result;
     }
 
+    /**
+     * 
+     * Save order line
+     * 
+     * @param productPK. Product Id
+     * @param orderPK Order Id
+     * @param amount. Amount
+     * @return OrderLInePojo. Returns saved order Line
+     */
     @Transactional
     public OrderLinePojo persistOrderLine(int productPK, int orderPK, double amount) {
         int numberOfLines = 0;
@@ -318,16 +447,13 @@ public class CustomerService implements Serializable {
         return null;
     }
 
-    @Transactional
-    public Boolean deleteOrderLineById(int ordLinePK) {
-        OrderLinePojo orderLineToDelete = em.find(OrderLinePojo.class, ordLinePK);
-        if(orderLineToDelete != null) {
-            em.remove(orderLineToDelete);
-            return true;
-        }
-        return false;
-    }
-
+    /**
+     * Link product with store
+     * 
+     * @param productId. Product Id
+     * @param storeId. Store Id
+     * @return ProductPojo. Returns linked product
+     */
     @Transactional
     public ProductPojo linkProductAndStore(int productId, int storeId) {
         ProductPojo productToUpdate = em.find(ProductPojo.class, productId);
@@ -338,7 +464,13 @@ public class CustomerService implements Serializable {
         return productToUpdate;
     }
 
-        
+
+    /**
+     * Get All Order Lines by Order Id
+     * 
+     * @param orderPK. Order Id
+     * @return List<OrderLinePojo>. Returns all found order lines
+     */
     public List<OrderLinePojo> getAllOrderLines(int orderPK) {
         OrderPojo foundOrder = em.find(OrderPojo.class, orderPK);
         
@@ -350,6 +482,29 @@ public class CustomerService implements Serializable {
        
     }
 
+    /**
+     * Get All Order Lines, by Order
+     * 
+     * @param order
+     * @return List<OrderLinePojo>. Returns all found order lines
+     */
+    public List<OrderLinePojo> getAllOrderLines(OrderPojo order) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<OrderLinePojo> q = cb.createQuery(OrderLinePojo.class);
+        Root<OrderLinePojo> c = q.from(OrderLinePojo.class);
+        q.where(cb.equal(c.get("owningOrder"), order));
+        TypedQuery<OrderLinePojo> q2 = em.createQuery(q);
+        return q2.getResultList();
+    }
+
+
+    /**
+     * Delete Order Line by Order Line Number and Order Id
+     * 
+     * @param orderLineNumber. Order Line Number
+     * @param orderId. Order Id
+     * @return Boolean. Result of deleting Order Line(true - SUCCESS, false - FAILD)
+     */
     public Boolean deleteOrderLine(int orderLineNumber, int orderId) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<OrderLinePojo> q = cb.createQuery(OrderLinePojo.class);
@@ -367,14 +522,19 @@ public class CustomerService implements Serializable {
                 return true;
             }
         } else {
-            servletContext.log("Error during calling deleteOrderLine function. For orderLineNumber="+orderLineNumber+"  orderId="+orderId);
             return false;
         }
-
-        servletContext.log("Error during calling deleteOrderLine function. For orderLineNumber="+orderLineNumber+"  orderId="+orderId);
         return false;
     }
 
+    /**
+     * Update Order Line
+     * 
+     * @param orderLineNumber. Order Line Number
+     * @param orderId. Order Id
+     * @param newAmount. New Amount
+     * @return OrderLinePojo. Returns updated Order Line.
+     */
     public OrderLinePojo updateOrderLine(int orderLineNumber, int orderId, double newAmount) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<OrderLinePojo> q = cb.createQuery(OrderLinePojo.class);
@@ -392,12 +552,34 @@ public class CustomerService implements Serializable {
                 em.persist(orderLineToUpdate);
                 return orderLineToUpdate;
             }
+        }
+        return null;
+        
+    }
+
+    /**
+     * Get Order Line by Order Id and Order Line Number
+     * 
+     * 
+     * @param orderId. Order Id
+     * @param orderLineNumber. Order Line Number
+     * @return OrderLinePojo. Returns updated OrderLinePojo
+     */
+    public OrderLinePojo getOrderLineByOrderAndNumber(int orderId, int orderLineNumber) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<OrderLinePojo> q = cb.createQuery(OrderLinePojo.class);
+        Root<OrderLinePojo> c = q.from(OrderLinePojo.class);
+        OrderLinePk orderLinePk =  new OrderLinePk();
+        orderLinePk.setOwningOrderId(orderId);
+        orderLinePk.setOrderLineNo(orderLineNumber);
+        q.where(cb.equal(c.get("primaryKey"), orderLinePk));
+        TypedQuery<OrderLinePojo> q2 = em.createQuery(q);
+        
+        if(q2.getResultList().size() > 0) {
+            OrderLinePojo orderLineToView = q2.getSingleResult();
+            return orderLineToView;
         } else {
-            servletContext.log("Error during calling updateOrderLine function. For orderLineNumber="+orderLineNumber+"  orderId="+orderId);
             return null;
         }
-
-        servletContext.log("Error during calling updateOrderLine function. For orderLineNumber="+orderLineNumber+"  orderId="+orderId);
-        return null;
     }
 }

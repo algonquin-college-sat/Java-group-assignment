@@ -146,6 +146,12 @@ components:
            properties: {
                 storeName: {type: string, description: "Store name", example: Ottawa store}
            }
+        StoresList:
+            description: "list of stores"
+            type: array
+            items: {
+                $ref: "#/components/schemas/Store"
+            }
         Product:
             description: "(20F) Group Project - Product entity"
             type: object
@@ -155,6 +161,12 @@ components:
             properties: {
                 description: {type: string, description: "Product description", example: Tea},
                 serialNo: {type: string, description: "Product Serial Number", example: SN-123}
+            }
+        ProductsList:
+            description: "list of products"
+            type: array
+            items: {
+                $ref: "#/components/schemas/Product"
             }
         ProductStore:
            description: "(20F) Group Project - Product Store relations"
@@ -172,6 +184,12 @@ components:
             properties: {
                 description: {type: string, description: "Order description", example: My order}
             }
+        OrdersList:
+            description: "list of orders"
+            type: array
+            items: {
+                $ref: "#/components/schemas/Order"
+            }
         OrderLine:
             description: "(20F) Group Project - Order Line entity"
             type: object
@@ -180,6 +198,15 @@ components:
                 amount: {type: number, description: "Amount"},
                 productId: {type: integer, description: "Product Id", example: 2}
             }
+        OrderLinesList:
+            description: "(20F) Group Project - Order Lines List entity"
+            type: object
+            properties: {
+                orderId: {type: integer, description: "Order Id", example: 1},
+                amount: {type: number, description: "Amount"},
+                productId: {type: integer, description: "Product Id", example: 2}
+            }
+            
 paths:
     /customer:
         get:
@@ -335,7 +362,7 @@ paths:
                     content: {
                         application/json: {
                             schema: {
-                                $ref: "#/components/schemas/storeList"
+                                $ref: "#/components/schemas/StoresList"
                             }
                         }
                     }
@@ -685,12 +712,22 @@ paths:
             }
             tags:
                - orders
-    /order/orderLine/{id}:
+    /order/orderLine/{orderId}/{orderLineNumber}:
         get:
-            summary: "Retrieves an order by its id"
-            parameters: [{
-                $ref: "#/components/parameters/idPathParam"
-            }]
+            summary: "Retrieves an order line by its id"
+            parameters:
+                - name: "orderId"
+                  in: "path"
+                  description: "Order Id"
+                  required: true
+                  type: "integer"
+                  format: "int64"
+                - name: "orderLineNumber"
+                  in: "path"
+                  description: "Order Line Number"
+                  required: true
+                  type: "integer"
+                  format: "int64"
             responses: {
                 "200": {
                     description: "Ok (Successful operation)",
@@ -701,28 +738,6 @@ paths:
                             }
                         }
                     }
-                },
-                "401": {
-                    $ref: "#/components/responses/UnauthorizedUserError"
-                },
-                "403": {
-                    $ref: "#/components/responses/ForbiddenError"
-                },
-                "404": {
-                    $ref: "#/components/responses/NotFound"
-                }
-            }
-            tags:
-               - orders
-            
-        delete:
-            summary: "Removes an order line by its id"
-            parameters: [{
-                $ref: "#/components/parameters/idPathParam"
-            }]
-            responses: {
-                "204": {
-                    description: "Ok (No content, successful operation)"
                 },
                 "401": {
                     $ref: "#/components/responses/UnauthorizedUserError"
@@ -782,7 +797,7 @@ paths:
             tags:
                - orders
     /order/deleteOrderLineToOder/{orderLineNumber}/{orderId}:
-       put:
+       delete:
             summary: "Delete order line from order"
             parameters:
                 - name: "orderLineNumber"
