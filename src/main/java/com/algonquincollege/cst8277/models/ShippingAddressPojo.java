@@ -22,6 +22,9 @@ public class ShippingAddressPojo extends AddressPojo implements Serializable  {
     /** explicit set serialVersionUID */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Constructor
+     */
     // JPA requires each @Entity class have a default constructor
     public ShippingAddressPojo() {
     }

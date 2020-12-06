@@ -45,6 +45,9 @@ public class StorePojo extends PojoBase implements Serializable {
      */
     protected Set<ProductPojo> products = new HashSet<>();
 
+    /**
+     * Constructor
+     */
     // JPA requires each @Entity class have a default constructor
     public StorePojo() {
     }
