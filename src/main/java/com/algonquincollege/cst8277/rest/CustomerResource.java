@@ -60,6 +60,7 @@ public class CustomerResource {
     @Inject
     protected SecurityContext sc;
 
+    @RolesAllowed({"ADMIN_ROLE"})
     @GET
     public Response getCustomers() {
         servletContext.log("retrieving all customers ...");
@@ -124,6 +125,7 @@ public class CustomerResource {
       return response;
     }
 
+    @RolesAllowed({"ADMIN_ROLE", "USER_ROLE"})
     @PUT
     @Path("/addAddressForCustomer/{id}")
     public Response addAddressForCustomer(@PathParam(RESOURCE_PATH_ID_ELEMENT) int id, AddressPojo newAddress) {

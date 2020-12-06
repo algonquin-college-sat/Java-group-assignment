@@ -20,7 +20,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -51,6 +55,10 @@ public class SecurityUser implements Serializable, Principal {
     protected int id;
     protected String username;
     protected String pwHash;
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(name= "SECURITY_USER_SECURITY_ROLE",
+               joinColumns = {@JoinColumn(name="user_id")},
+               inverseJoinColumns = {@JoinColumn(name="role_id")})
     protected Set<SecurityRole> roles = new HashSet<>();
     
     @OneToOne(cascade=CascadeType.ALL)

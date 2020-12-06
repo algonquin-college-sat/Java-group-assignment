@@ -11,10 +11,17 @@ package com.algonquincollege.cst8277.models;
 import java.io.Serializable;
 import java.util.Set;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
@@ -32,6 +39,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
     name="roleByName",
     query="SELECT c FROM SecurityRole c WHERE c.roleName=:custRoleName"
 )
+@AttributeOverride(name="id", column=@Column(name="ROLE_ID"))
 public class SecurityRole implements Serializable {
     /** explicit set serialVersionUID */
     private static final long serialVersionUID = 1L;
@@ -42,6 +50,7 @@ public class SecurityRole implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected int id;
     protected String roleName;
+    @ManyToMany(mappedBy = "roles", cascade = CascadeType.PERSIST)
     protected Set<SecurityUser> users;
 
     public SecurityRole() {

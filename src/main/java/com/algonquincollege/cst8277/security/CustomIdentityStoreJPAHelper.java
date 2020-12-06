@@ -20,8 +20,12 @@ import javax.ejb.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
+import com.algonquincollege.cst8277.models.ProductPojo;
 import com.algonquincollege.cst8277.models.SecurityRole;
 import com.algonquincollege.cst8277.models.SecurityUser;
 
@@ -29,13 +33,20 @@ import com.algonquincollege.cst8277.models.SecurityUser;
  * Stateless Session bean should also be a Singleton
  */
 public class CustomIdentityStoreJPAHelper {
+    public static final String CUSTOMER_PU = "acmeCustomers-PU";
 
+    @PersistenceContext(name = CUSTOMER_PU)
     protected EntityManager em;
 
     public SecurityUser findUserByName(String username) {
         SecurityUser user = null;
         try {
-            //TODO
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<SecurityUser> q = cb.createQuery(SecurityUser.class);
+            Root<SecurityUser> c = q.from(SecurityUser.class);
+            q.where(cb.equal(c.get("username"), username));
+            TypedQuery<SecurityUser> q2 = em.createQuery(q);
+            user = q2.getSingleResult();
         }
         catch (Exception e) {
             //e.printStackTrace();
@@ -54,11 +65,15 @@ public class CustomIdentityStoreJPAHelper {
 
     @Transactional
     public void saveSecurityUser(SecurityUser user) {
-        //TODO
+        if(user != null) {
+            em.persist(user);
+        }
     }
 
     @Transactional
     public void saveSecurityRole(SecurityRole role) {
-        //TODO
+        if(role != null) {
+            em.persist(role);
+        }
     }
 }
