@@ -53,7 +53,8 @@ public abstract class AddressPojo extends PojoBase implements Serializable {
     protected String postal;
     protected String state;
 
-    /**
+   /**
+     * Constructor
      * JPA requires each @Entity class have a default constructor
      */
     public AddressPojo() {

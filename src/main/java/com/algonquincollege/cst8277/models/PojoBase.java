@@ -26,37 +26,80 @@ import javax.persistence.MappedSuperclass;
 public abstract class PojoBase implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Id
+     */
     protected int id;
+    
+    /**
+     * Created
+     */
     protected LocalDateTime created;
+    
+    /**
+     * Updated
+     */
     protected LocalDateTime updated;
+    
+    /**
+     * Version
+     */
     protected int version;
 
+    /**
+     * @return the value for id
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getId() {
         return id;
     }
+
+    /**
+     * @param id new value for id
+     */
     public void setId(int id) {
         this.id = id;
     }
 
+    /**
+     * @return the value for created
+     */
     public LocalDateTime getCreatedDate() {
         return created;
     }
+
+    /**
+     * @param created new value for created
+     */
     public void setCreatedDate(LocalDateTime created) {
         this.created = created;
     }
 
+    /**
+     * @return the value for updated
+     */
     public LocalDateTime getUpdatedDate() {
         return updated;
     }
+
+    /**
+     * @param product new value for product
+     */
     public void setUpdatedDate(LocalDateTime updated) {
         this.updated = updated;
     }
 
+    /**
+     * @return the value for version
+     */
     public int getVersion() {
         return version;
     }
+    
+    /**
+     * @param version new value for version
+     */
     public void setVersion(int version) {
         this.version = version;
     }

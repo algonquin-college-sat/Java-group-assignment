@@ -22,15 +22,32 @@ public class BillingAddressPojo extends AddressPojo implements Serializable {
     /** explicit set serialVersionUID */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Is Also Shipping address
+     */
     protected boolean isAlsoShipping;
 
+    /**
+     * Constructor
+     */
     // JPA requires each @Entity class have a default constructor
     public BillingAddressPojo() {
     }
 
+    
+    /**
+     * 
+     * @return boolean. Is Also Shipping
+     */
     public boolean isAlsoShipping() {
         return isAlsoShipping;
     }
+    
+    /**
+     * Set Also Shipping
+     * 
+     * @param isAlsoShipping
+     */
     public void setAlsoShipping(boolean isAlsoShipping) {
         this.isAlsoShipping = isAlsoShipping;
     }

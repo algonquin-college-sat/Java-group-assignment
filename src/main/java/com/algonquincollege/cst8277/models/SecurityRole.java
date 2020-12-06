@@ -46,40 +46,84 @@ public class SecurityRole implements Serializable {
     /** explicit set serialVersionUID */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Constant
+     */
     public static final String ROLE_BY_NAME_QUERY = "roleByName";
 
+    /**
+     * Id
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected int id;
+    
+    /**
+     * Role Name
+     */
     protected String roleName;
+    
+    /**
+     * Users
+     */
     @ManyToMany(mappedBy = "roles", cascade = CascadeType.PERSIST)
     protected Set<SecurityUser> users;
 
+    
+    /**
+     * Constructor
+     */
     public SecurityRole() {
         super();
     }
 
+    /**
+     * @return the value for id
+     */
     public int getId() {
         return id;
     }
+    
+    /**
+     * @param id new value for id
+     */
     public void setId(int id) {
         this.id = id;
     }
 
+    /**
+     * @return the value for roleName
+     */
     public String getRoleName() {
         return roleName;
     }
+    
+    /**
+     * @param roleName new value for roleName
+     */
     public void setRoleName(String roleName) {
         this.roleName = roleName;
     }
 
+    /**
+     * @return the value for users
+     */
     @JsonInclude(Include.NON_NULL)
     public Set<SecurityUser> getUsers() {
         return users;
     }
+    
+    /**
+     * @param users new value for users
+     */
     public void setUsers(Set<SecurityUser> users) {
         this.users = users;
     }
+    
+    /**
+     * Add users to role
+     * @param user
+     */
     public void addUserToRole(SecurityUser user) {
         getUsers().add(user);
     }

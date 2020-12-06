@@ -38,40 +38,83 @@ public class OrderLinePojo implements Serializable {
     @EmbeddedId
     protected OrderLinePk primaryKey;
 
+    /**
+     * Owning Order
+     */
     @MapsId("owningOrderId")
     @ManyToOne
     protected OrderPojo owningOrder;
+    
+    /**
+     * Amoung
+     */
     protected Double amount;
+    
+    /**
+     * Product
+     */
     protected ProductPojo product;
 
+    /**
+     * Constructor
+     */
     // JPA requires each @Entity class have a default constructor
     public OrderLinePojo() {
     }
 
+    /**
+     * @return the value for primaryKey
+     */
     public OrderLinePk getPk() {
         return primaryKey;
     }
+
+    /**
+     * @param primaryKey new value for primaryKey
+     */
     public void setPk(OrderLinePk primaryKey) {
         this.primaryKey = primaryKey;
     }
     
+    /**
+     * @return the value for owningOrder
+     */
     public OrderPojo getOwningOrder() {
         return owningOrder;
     }
+
+    /**
+     * @param owningOrder new value for owningOrder
+     */
     public void setOwningOrder(OrderPojo owningOrder) {
         this.owningOrder = owningOrder;
     }
 
+    /**
+     * @return the value for amount
+     */
     public Double getAmount() {
         return amount;
     }
+
+    /**
+     * @param amount new value for amount
+     */
+
     public void setAmount(Double amount) {
         this.amount = amount;
     }
 
+    /**
+     * @return the value for product
+     */
     public ProductPojo getProduct() {
         return product;
     }
+    
+    /**
+     * @param product new value for product
+     */
     public void setProduct(ProductPojo product) {
         this.product = product;
     }

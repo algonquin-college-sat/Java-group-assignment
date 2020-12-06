@@ -21,20 +21,40 @@ public class OrderLinePk implements Serializable {
     /** explicit set serialVersionUID */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Owning Order Id
+     */
     protected int owningOrderId;
     
+    /**
+     * Order Line Number
+     */
     protected int orderLineNo;
 
+    /**
+     * @return the value for owningOrderId
+     */
     public int getOwningOrderId() {
         return owningOrderId;
     }
+    
+    /**
+     * @param owningOrderId new value for owningOrderId
+     */
     public void setOwningOrderId(int owningOrderId) {
         this.owningOrderId = owningOrderId;
     }
 
+    /**
+     * @return the value for orderLineNo
+     */
     public int getOrderLineNo() {
         return orderLineNo;
     }
+
+    /**
+     * @param orderLineNo new value for orderLineNo
+     */
     public void setOrderLineNo(int orderLineNo) {
         this.orderLineNo = orderLineNo;
     }

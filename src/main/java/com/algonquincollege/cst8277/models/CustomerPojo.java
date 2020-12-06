@@ -30,17 +30,45 @@ import javax.persistence.Table;
 @Table(name="CUSTOMER")
 @AttributeOverride(name="id", column=@Column(name="CUSTOMER_ID"))
 public class CustomerPojo extends PojoBase implements Serializable {
+    /*
+     * Define the constants
+     */
     private static final long serialVersionUID = 1L;
 
     public static final String ALL_CUSTOMERS_QUERY_NAME = "allCustomers";
 
+    /**
+     * First name
+     */
     protected String firstName;
+    
+    /**
+     * Last name
+     */
     protected String lastName;
+    
+    /**
+     * Email
+     */
     protected String email;
+    
+    /**
+     * Phone number
+     */
     protected String phoneNumber;
+    
+    /**
+     * Shipping address
+     */
     protected AddressPojo shippingAddress;
+    /**
+     * Billing address
+     */
     protected AddressPojo billingAddress;
 	
+    /**
+     * Constructor
+     */
     // JPA requires each @Entity class have a default constructor
 	public CustomerPojo() {
 	}
@@ -73,20 +101,36 @@ public class CustomerPojo extends PojoBase implements Serializable {
         this.lastName = lastName;
     }
 
+    /**
+     * @return the value for email
+     */
     public String getEmail() {
         return email;
     }
+    /**
+     * @param email new value for email
+     */
     public void setEmail(String email) {
         this.email = email;
     }
 
+    /**
+     * @return the value for phoneNumber
+     */
     public String getPhoneNumber() {
         return phoneNumber;
     }
+
+    /**
+     * @param phoneNumber new value for phoneNumber
+     */
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
+    /**
+     * @return the value for Shipping Address
+     */
     //dont use CascadeType.All (skipping CascadeType.REMOVE): what if two customers
     //live at the same address and 1 leaves the house but the other does not?
     @ManyToOne(cascade = CascadeType.PERSIST)
@@ -94,15 +138,26 @@ public class CustomerPojo extends PojoBase implements Serializable {
     public AddressPojo getShippingAddress() {
         return shippingAddress;
     }
+    
+    /**
+     * @param shipping Address new value for shipping Address
+     */
     public void setShippingAddress(AddressPojo shippingAddress) {
         this.shippingAddress = shippingAddress;
     }
 
+    /**
+     * @return the value for Billing Address
+     */
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "BILLINGADDRESS_ADDR_ID")
     public AddressPojo getBillingAddress() {
         return billingAddress;
     }
+
+    /**
+     * @param billing Address new value for billing Address
+     */
     public void setBillingAddress(AddressPojo billingAddress) {
         this.billingAddress = billingAddress;
     }

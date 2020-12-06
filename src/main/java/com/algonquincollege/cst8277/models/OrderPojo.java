@@ -44,6 +44,9 @@ public class OrderPojo extends PojoBase implements Serializable {
     protected List<OrderLinePojo> orderlines;
     protected CustomerPojo owningCustomer;
     
+    /**
+     * Constructor
+     */
     // JPA requires each @Entity class have a default constructor
 	public OrderPojo() {
 	}

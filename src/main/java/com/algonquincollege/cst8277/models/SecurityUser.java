@@ -48,67 +48,129 @@ public class SecurityUser implements Serializable, Principal {
     /** explicit set serialVersionUID */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Constants
+     */
     public static final String USER_FOR_OWNING_CUST_QUERY =
         "userForOwningCust";
     public static final String SECURITY_USER_BY_NAME_QUERY =
         "userByName";
 
+    /**
+     * Id
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected int id;
+    
+    /**
+     * username
+     */
     protected String username;
+    
+    /**
+     * pwHash
+     */
     protected String pwHash;
+    
+    /**
+     * roles
+     */
     @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(name= "SECURITY_USER_SECURITY_ROLE",
                joinColumns = {@JoinColumn(name="user_id")},
                inverseJoinColumns = {@JoinColumn(name="role_id")})
     protected Set<SecurityRole> roles = new HashSet<>();
     
+    /**
+     * Customer
+     */
     @OneToOne(cascade=CascadeType.ALL)
     protected CustomerPojo cust;
 
+    /**
+     * Constructor
+     */
     public SecurityUser() {
         super();
     }
 
+    /**
+     * @return the value for id
+     */
     public int getId() {
         return id;
     }
+    
+    /**
+     * @param id new value for id
+     */
     public void setId(int id) {
         this.id = id;
     }
 
+    /**
+     * @return the value for username
+     */
     public String getUsername() {
         return username;
     }
+    /**
+     * @param username new value for username
+     */
     public void setUsername(String username) {
         this.username = username;
     }
 
+    
+    /**
+     * @return the value for pwHash
+     */
     @JsonIgnore
     public String getPwHash() {
         return pwHash;
     }
+    
+    /**
+     * @param pwHash new value for pwHash
+     */
     public void setPwHash(String pwHash) {
         this.pwHash = pwHash;
     }
     
+    /**
+     * @return the value for roles
+     */
     @JsonInclude(Include.NON_NULL)
     @JsonSerialize(using = SecurityRoleSerializer.class)
     public Set<SecurityRole> getRoles() {
         return roles;
     }
+
+    /**
+     * @param roles new value for roles
+     */
     public void setRoles(Set<SecurityRole> roles) {
         this.roles = roles;
     }
 
+    /**
+     * @return the value for cust
+     */
     public CustomerPojo getCustomer() {
         return cust;
     }
+    
+    /**
+     * @param cust new value for cust
+     */
     public void setCustomer(CustomerPojo cust) {
         this.cust = cust;
     }
 
+    /**
+     * @return the value for name
+     */
     //Principal
     @JsonIgnore
     @Override

@@ -38,10 +38,25 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 public class ProductPojo extends PojoBase implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Description
+     */
     protected String description;
+    
+    /**
+     * Serial No
+     */
     protected String serialNo;
+    
+    /**
+     * Stores
+     */
     protected Set<StorePojo> stores = new HashSet<>();
 
+
+    /**
+     * Constructor
+     */
     // JPA requires each @Entity class have a default constructor
     public ProductPojo() {
     }
@@ -52,6 +67,7 @@ public class ProductPojo extends PojoBase implements Serializable {
     public String getDescription() {
         return description;
     }
+    
     /**
      * @param description new value for description
      */
@@ -59,13 +75,23 @@ public class ProductPojo extends PojoBase implements Serializable {
         this.description = description;
     }
 
+    /**
+     * @return the value for serialNo
+     */
     public String getSerialNo() {
         return serialNo;
     }
+
+    /**
+     * @param serialNo new value for serialNo
+     */
     public void setSerialNo(String serialNo) {
         this.serialNo = serialNo;
     }
     
+    /**
+     * @return the value for stores
+     */
     @JsonInclude(Include.NON_NULL)
     @ManyToMany
     @JoinTable(name = "stores_products",
@@ -74,6 +100,10 @@ public class ProductPojo extends PojoBase implements Serializable {
     public Set<StorePojo> getStores() {
         return stores;
     }
+
+    /**
+     * @param stores new value for stores
+     */
     public void setStores(Set<StorePojo> stores) {
         this.stores = stores;
     }

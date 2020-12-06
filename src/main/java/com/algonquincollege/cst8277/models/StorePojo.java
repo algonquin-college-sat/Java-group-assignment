@@ -35,21 +35,43 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 @AttributeOverride(name="id", column=@Column(name="store_id"))
 public class StorePojo extends PojoBase implements Serializable {
     private static final long serialVersionUID = 1L;
-    
+ 
+    /**
+     * Store name
+     */
     protected String storeName;
+    /**
+     * List of products in store
+     */
     protected Set<ProductPojo> products = new HashSet<>();
 
     // JPA requires each @Entity class have a default constructor
     public StorePojo() {
     }
 
+    /**
+     * Get store name
+     * 
+     * @return String
+     */
     public String getStoreName() {
         return storeName;
     }
+    
+    /**
+     * Set store name
+     * 
+     * @param storeName
+     */
     public void setStoreName(String storeName) {
         this.storeName = storeName;
     }
     
+    /**
+     * Get products in store
+     * 
+     * @return Set<ProductPojo>
+     */
     @JsonSerialize(using = ProductSerializer.class)
       //Discovered what I think is a bug: you should be able to list them in any order,
       //but it turns out, EclipseLink's JPA implementation needs the @JoinColumn StorePojo's PK
@@ -61,8 +83,13 @@ public class StorePojo extends PojoBase implements Serializable {
     public Set<ProductPojo> getProducts() {
         return products;
     }
+    
+    /**
+     * Set products
+     * 
+     * @param products
+     */
     public void setProducts(Set<ProductPojo> products) {
         this.products = products;
     }
-
 }
