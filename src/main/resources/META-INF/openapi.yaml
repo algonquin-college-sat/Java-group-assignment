@@ -227,7 +227,32 @@ paths:
             }
             tags:
                - customers
-
+        put:
+            requestBody: {
+                description: "Update customer in Db",
+                required: true,
+                content: {
+                    application/json: {
+                        schema: {
+                            $ref: "#/components/schemas/Customer"
+                        }
+                    }
+                }
+            }
+            responses: {
+                "200": {
+                    description: "Ok (Successful operation)",
+                    content: {
+                        application/json: {
+                            schema: {
+                                $ref: "#/components/schemas/CustomersList"
+                            }
+                        }
+                    }
+                }
+            }
+            tags:
+               - customers
         post:
             requestBody: {
                 description: "new customer to be added to Db",
@@ -254,7 +279,6 @@ paths:
             }
             tags:
                - customers
-
     /customer/{id}:
         get:
             summary: "Retrieves a customer by its id"
@@ -391,7 +415,7 @@ paths:
                     content: {
                         application/json: {
                             schema: {
-                                $ref: "#/components/schemas/StoreList"
+                                $ref: "#/components/schemas/StoresList"
                             }
                         }
                     }
@@ -399,7 +423,32 @@ paths:
             }
             tags:
                - stores
-
+        put:
+            requestBody: {
+                description: "Update store in Db",
+                required: true,
+                content: {
+                    application/json: {
+                        schema: {
+                            $ref: "#/components/schemas/Store"
+                        }
+                    }
+                }
+            }
+            responses: {
+                "200": {
+                    description: "Ok (Successful operation)",
+                    content: {
+                        application/json: {
+                            schema: {
+                                $ref: "#/components/schemas/StoresList"
+                            }
+                        }
+                    }
+                }
+            }
+            tags:
+               - stores
     /store/{id}:
         get:
             summary: "Retrieves a store by its id"
@@ -496,7 +545,32 @@ paths:
             }
             tags:
                - products
-
+        put:
+            requestBody: {
+                description: "Update product in Db",
+                required: true,
+                content: {
+                    application/json: {
+                        schema: {
+                            $ref: "#/components/schemas/Product"
+                        }
+                    }
+                }
+            }
+            responses: {
+                "200": {
+                    description: "Ok (Successful operation)",
+                    content: {
+                        application/json: {
+                            schema: {
+                                $ref: "#/components/schemas/ProductsList"
+                            }
+                        }
+                    }
+                }
+            }
+            tags:
+               - products
     /product/{id}:
         get:
             summary: "Retrieves a product by its id"
@@ -633,7 +707,32 @@ paths:
             }
             tags:
                - orders
-
+        put:
+            requestBody: {
+                description: "Update order in Db",
+                required: true,
+                content: {
+                    application/json: {
+                        schema: {
+                            $ref: "#/components/schemas/Order"
+                        }
+                    }
+                }
+            }
+            responses: {
+                "200": {
+                    description: "Ok (Successful operation)",
+                    content: {
+                        application/json: {
+                            schema: {
+                                $ref: "#/components/schemas/OrdersList"
+                            }
+                        }
+                    }
+                }
+            }
+            tags:
+               - orders
     /order/{id}:
         get:
             summary: "Retrieves an order by its id"

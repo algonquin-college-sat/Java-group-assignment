@@ -123,6 +123,7 @@ public class CustomerResource {
      * @param id. Customer Id
      * @return Response. Result of customer deleting
      */
+    @RolesAllowed({"ADMIN_ROLE"})
     @DELETE
     @Path("{id}")
     public Response deleteCustomerById(@PathParam(RESOURCE_PATH_ID_ELEMENT) int id) {
@@ -145,6 +146,20 @@ public class CustomerResource {
     public Response addCustomer(CustomerPojo newCustomer) {
       Response response = null;
       CustomerPojo saveCustomerPojo = customerServiceBean.persistCustomer(newCustomer);
+      response = Response.ok(newCustomer).build();
+      return response;
+    }
+
+    /**
+     * 
+     * @param newCustomer
+     * @return Response. Return saved new customer
+     */
+    @RolesAllowed({"ADMIN_ROLE"})
+    @PUT
+    public Response updateCustomer(CustomerPojo newCustomer) {
+      Response response = null;
+      CustomerPojo saveCustomerPojo = customerServiceBean.updateCustomer(newCustomer);
       response = Response.ok(newCustomer).build();
       return response;
     }

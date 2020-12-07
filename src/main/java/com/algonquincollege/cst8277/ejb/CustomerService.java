@@ -154,6 +154,18 @@ public class CustomerService implements Serializable {
     }
 
     /**
+     * Update Customer.
+     * 
+     * @param customer. Customer for updating.
+     * @return CustomerPojo. Returns saved customer
+     */
+    @Transactional
+    public CustomerPojo updateCustomer(CustomerPojo customer) {
+        em.merge(customer);
+        return customer;
+    }
+
+    /**
      * Create a new SecurityUser and a new Customer
      * 
      * @param newCustomerWithIdTimestamps
@@ -241,10 +253,22 @@ public class CustomerService implements Serializable {
     }
 
     /**
+     * Update Product
+     * 
+     * @param productToUpdate. Product for saving
+     * @return ProductPojo. Returns updated product
+     */
+    @Transactional
+    public ProductPojo updateProduct(ProductPojo productToUpdate) {
+        em.merge(productToUpdate);
+        return productToUpdate;
+    }
+
+    /**
      * Persist Product
      * 
      * @param newProduct. Product for saving
-     * @return ProductPojo. Returns updated/saved product
+     * @return ProductPojo. Returns saved product
      */
     @Transactional
     public ProductPojo persistProduct(ProductPojo newProduct) {
@@ -314,14 +338,26 @@ public class CustomerService implements Serializable {
      * Save store
      * 
      * @param newStore
-     * @return StorePojo. Returns saved/updated store
+     * @return StorePojo. Returns saved store
      */
     @Transactional
     public StorePojo persistStore(StorePojo newStore) {
         em.persist(newStore);
         return newStore;
     }
-    
+
+    /**
+     * Update store
+     * 
+     * @param storeToSave
+     * @return StorePojo. Returns updated store
+     */
+    @Transactional
+    public StorePojo updateStore(StorePojo storeToSave) {
+        em.merge(storeToSave);
+        return storeToSave;
+    }
+
     /**
      * Delete Store by Id
      * 
@@ -392,7 +428,7 @@ public class CustomerService implements Serializable {
      */
     @Transactional
     public OrderPojo persistOrder(OrderPojo newOrder) {
-        em.persist(newOrder);
+        em.merge(newOrder);
         return newOrder;
     }
     

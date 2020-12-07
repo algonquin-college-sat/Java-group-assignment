@@ -22,6 +22,7 @@ import static javax.ws.rs.core.Response.Status.OK;
 
 import java.util.List;
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.inject.Inject;
@@ -63,7 +64,7 @@ public class ProductResource {
      * 
      * @return Response. Returns all products
      */
-    @RolesAllowed({"ADMIN_ROLE", "USER_ROLE"})
+    @PermitAll
     @GET
     public Response getProducts() {
         servletContext.log("retrieving all products ...");
@@ -78,7 +79,7 @@ public class ProductResource {
      * @param id. Product Id
      * @return Response. Returns found product.
      */
-    @RolesAllowed({"ADMIN_ROLE", "USER_ROLE"})
+    @PermitAll
     @GET
     @Path("{id}")
     public Response getProductById(@PathParam(RESOURCE_PATH_ID_ELEMENT) int id) {
@@ -119,6 +120,21 @@ public class ProductResource {
       Response response = null;
       ProductPojo saveCustomerPojo = customerServiceBean.persistProduct(newProduct);
       response = Response.ok(newProduct).build();
+      return response;
+    }
+
+    /**
+     * Update Product
+     * 
+     * @param newProduct. New product for saving
+     * @return Response. Returns saved product
+     */
+    @RolesAllowed({"ADMIN_ROLE"})
+    @PUT
+    public Response updateProduct(ProductPojo productToUpdate) {
+      Response response = null;
+      ProductPojo saveCustomerPojo = customerServiceBean.updateProduct(productToUpdate);
+      response = Response.ok(saveCustomerPojo).build();
       return response;
     }
 

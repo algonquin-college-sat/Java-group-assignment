@@ -20,6 +20,7 @@ import static javax.ws.rs.core.Response.Status.OK;
 
 import java.util.List;
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.inject.Inject;
@@ -28,6 +29,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -61,7 +63,7 @@ public class StoreResource {
      * 
      * @return Response. Returns all stores
      */
-    @RolesAllowed({"ADMIN_ROLE", "USER_ROLE"})
+    @PermitAll
     @GET
     public Response getStores() {
         servletContext.log("retrieving all stores ...");
@@ -76,7 +78,7 @@ public class StoreResource {
      * @param id. Store Id
      * @return Response. Returns found store
      */
-    @RolesAllowed({"ADMIN_ROLE", "USER_ROLE"})
+    @PermitAll
     @GET
     @Path("{id}")
     public Response getStoreById(@PathParam(RESOURCE_PATH_ID_ELEMENT) int id) {
@@ -99,6 +101,21 @@ public class StoreResource {
       Response response = null;
       StorePojo saveCustomerPojo = customerServiceBean.persistStore(newStore);
       response = Response.ok(newStore).build();
+      return response;
+    }
+
+    /**
+     * Update Store
+     * 
+     * @param newStore
+     * @return Response. Returns saved updated store
+     */
+    @RolesAllowed({"ADMIN_ROLE"})
+    @PUT
+    public Response updateStore(StorePojo storeToUpdate) {
+      Response response = null;
+      StorePojo saveCustomerPojo = customerServiceBean.updateStore(storeToUpdate);
+      response = Response.ok(saveCustomerPojo).build();
       return response;
     }
 

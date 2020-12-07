@@ -27,6 +27,7 @@ import static javax.ws.rs.core.Response.Status.OK;
 import java.security.Principal;
 import java.util.List;
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.inject.Inject;
@@ -99,7 +100,7 @@ public class OrderResource {
      * @param id. Order id
      * @return Response. Returns found order by Id
      */
-    @RolesAllowed({"ADMIN_ROLE", "USER_ROLE"})
+    @PermitAll
     @GET
     @Path("{id}")
     public Response getOrderById(@PathParam(RESOURCE_PATH_ID_ELEMENT) int id) {
@@ -153,6 +154,22 @@ public class OrderResource {
               newOrder.setOwningCustomer(cust);
           }
       }
+      OrderPojo savedOrder = customerServiceBean.persistOrder(newOrder);
+      response = Response.ok(savedOrder).build();
+      return response;
+    }
+
+    /**
+     * 
+     * Update Order
+     * 
+     * @param newOrder. Order for saving
+     * @return Response. Returns saved Order
+     */
+    @RolesAllowed({"ADMIN_ROLE", "USER_ROLE"})
+    @PUT
+    public Response updateOrder(OrderPojo newOrder) {
+      Response response = null;
       OrderPojo savedOrder = customerServiceBean.persistOrder(newOrder);
       response = Response.ok(savedOrder).build();
       return response;
